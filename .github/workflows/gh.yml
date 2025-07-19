@@ -1,0 +1,13 @@
+name: n138-kz.github.io
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  send_github_context:
+    uses: n138-kz/n138-kz/.github/workflows/github-act_send_github_context.yml@main
+    # https://github.com/n138-kz/n138-kz/blob/main/.github/workflows/github-act_send_github_context.yml
+    secrets: inherit # pass all secrets
