@@ -17,9 +17,10 @@ discord_embed_json=$(echo ${discord_embed_json} | jq '.fields |= .+[{"name":"> M
 discord_payload_json='{"username":"'${discord_avatar_name}'","avatar_url":"'${discord_avatar_url}'","embeds":['${discord_embed_json}']}'
 curl -s -X PATCH -H 'Content-Type: application/json' --data "${discord_payload_json}" ${discord_webhook_url}/messages/${discord_webhook_loginhistory_id}'?wait=true' | jq > /tmp/discord_embed_json/${HOSTNAME%%.*}_${runtime}_p1.log.json
 
-external_api=$(curl -s -H "Authorization: Bearer xxxxxxxxxxxxxx" https://ipinfo.io/$(echo ${SSH_CONNECTION} | awk '{print $1}')/json | sed -z 's/[\f\r\n]/\\n/g' | sed 's/"/\\"/g')
-external_api=$(curl -s -H "Authorization: Bearer xxxxxxxxxxxxxx" https://ipinfo.io/$(echo ${SSH_CONNECTION} | awk '{print $1}')/json | sed -z 's/[\f\r\n]/\\n/g')
-external_api=$(curl -s -H "Authorization: Bearer xxxxxxxxxxxxxx" https://ipinfo.io/$(echo ${SSH_CONNECTION} | awk '{print $1}')/json)
+ipinfo_token='xxxxxxxxxxxxxx'
+external_api=$(curl -s -H "Authorization: Bearer ${ipinfo_token}" https://ipinfo.io/$(echo ${SSH_CONNECTION} | awk '{print $1}')/json | sed -z 's/[\f\r\n]/\\n/g' | sed 's/"/\\"/g')
+external_api=$(curl -s -H "Authorization: Bearer ${ipinfo_token}" https://ipinfo.io/$(echo ${SSH_CONNECTION} | awk '{print $1}')/json | sed -z 's/[\f\r\n]/\\n/g')
+external_api=$(curl -s -H "Authorization: Bearer ${ipinfo_token}" https://ipinfo.io/$(echo ${SSH_CONNECTION} | awk '{print $1}')/json)
 external_api=$(echo ${external_api}|jq -r .org)
 external_api='Org: '${external_api}
 external_api=$(echo ${external_api}|sed 's/ /_/g')
