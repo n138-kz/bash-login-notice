@@ -108,6 +108,8 @@ config = {
                     'url': '',
                 },
             },
+            "at_mention": [
+            ],
         },
         'avatar': {
             'url': 'https://hangstuck.com/wp-content/uploads/2020/08/bash-official-icon-512x512-1.png',
@@ -226,6 +228,7 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
+            'discord/webhook/at_mention',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
@@ -266,6 +269,7 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
+            'discord/webhook/at_mention',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
@@ -306,6 +310,7 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
+            'discord/webhook/at_mention',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
