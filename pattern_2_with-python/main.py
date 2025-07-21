@@ -153,31 +153,30 @@ if os.path.exists(config_dir+config_file):
     try:
         with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
             try:
-                config['discord']['webhook']['url'] = json.load(f)['discord']['webhook']['url']
+                config_custom = json.load(f)
                 config_loadstate|=2
-            except (json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
-                pass
+            except (json.JSONDecodeError, UnicodeDecodeError):
+                config_loadstate^=2
+        for key in [
+            'discord/webhook/url',
+            'ipinfo/auth/token',
+        ]:
+            key = key.split('/')
             try:
-                config['discord']['webhook']['url'] = json.load(f)['discord']['avatar']['url']
-                config_loadstate|=2
-            except (json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
-                pass
+                config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+            except (NameError, TypeError):
+                config_loadstate^=2
+        for key in [
+            'discord/avatar/url',
+            'discord/avatar/name',
+            'ipinfo/auth/type',
+        ]:
+            key = key.split('/')
             try:
-                config['discord']['webhook']['url'] = json.load(f)['discord']['avatar']['name']
-                config_loadstate|=2
-            except (json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+            except (NameError, TypeError):
                 pass
-            try:
-                config['ipinfo']['auth']['token'] = json.load(f)['ipinfo']['auth']['token']
-                config_loadstate|=2
-            except (json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
-                pass
-            try:
-                config['ipinfo']['auth']['type'] = json.load(f)['ipinfo']['auth']['type']
-                config_loadstate|=2
-            except (json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
-                pass
-            config['runner']['config']['files'].append(config_dir+config_file)
+        config['runner']['config']['files'].append(config_dir+config_file)
     except (FileNotFoundError, PermissionError):
         pass
 try:
