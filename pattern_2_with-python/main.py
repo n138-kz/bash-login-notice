@@ -276,9 +276,40 @@ discord_embed_json['fields'].append(discord_field_json)
 external_api = request_get(f'''https://ipinfo.io/{config['env']['os_dependent']['linux']['common']['ssh_client'][0]}''', {
     'Authorization': f'''{config['ipinfo']['auth']['type']} {config['ipinfo']['auth']['token']}'''
 })
+for key in [
+    'ip',
+    'hostname', # Legacy Free ipinfo.io API
+    'city', # Legacy Free ipinfo.io API
+    'region', # Legacy Free ipinfo.io API
+    'country', # Legacy Free ipinfo.io API
+    'loc', # Legacy Free ipinfo.io API
+    'org', # Legacy Free ipinfo.io API
+    'postal', # Legacy Free ipinfo.io API
+    'timezone', # Legacy Free ipinfo.io API
+    'readme', # Legacy Free ipinfo.io API
+    'anycast', # Legacy Free ipinfo.io API
+    'bogon', # Legacy Free ipinfo.io API
+    'asn', # ipinfo.io Lite API
+    'as_name', # ipinfo.io Lite API
+    'as_domain', # ipinfo.io Lite API
+    'country_code', # ipinfo.io Lite API
+    'country', # ipinfo.io Lite API
+    'continent_code', # ipinfo.io Lite API
+    'continent', # ipinfo.io Lite API
+]:
+    if key not in external_api:
+        external_api[key] = ''
+print(json.dumps(external_api,indent=4))
+external_api_ipinfo = [
+    f'''{external_api['country']} {external_api['region']} {external_api['city']}'''.strip(),
+    f'''{external_api['org']}'''.strip(),
+    f'''{external_api['hostname']} {external_api['ip']}'''.strip(),
+]
+external_api_ipinfo = [item for item in external_api_ipinfo if item != '']
+external_api_ipinfo = '\n'.join(external_api_ipinfo)
 discord_field_json = {
     'name': '',
-    'value': f'''{external_api['country']} {external_api['region']} {external_api['city']}\n{external_api['org']}\n{external_api['hostname']}\n''',
+    'value': external_api_ipinfo,
     'inline': False,
 }
 discord_embed_json['fields'].append(discord_field_json)
