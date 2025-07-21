@@ -430,6 +430,7 @@ discord_payload_json = {
 }
 discord_embed_json = {
     'title': 'Login Notice',
+    'description': '',
     'color': 0xc0c0c0,
     'footer': {
         'text': config['env']['os_dependent']['linux']['common']['hostname'],
