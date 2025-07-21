@@ -406,5 +406,18 @@ discord_field_json = {
 }
 discord_embed_json['fields'].append(discord_field_json)
 discord_payload_json['embeds'].append(discord_embed_json)
-print(json.dumps(config,indent=4))
 print(json.dumps(discord_payload_json,indent=4))
+
+# Push to Discord
+try: 
+    print(config['discord']['webhook']['url'])
+    request=requests.post(config['discord']['webhook']['url'], json=discord_payload_json)
+    request.raise_for_status()
+except requests.exceptions.HTTPError as errh:
+    print(f"HTTPエラーが発生しました: {errh}")
+except requests.exceptions.ConnectionError as errc:
+    print(f"接続エラーが発生しました: {errc}")
+except requests.exceptions.Timeout as errt:
+    print(f"タイムアウトエラーが発生しました: {errt}")
+except requests.exceptions.RequestException as err:
+    print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
