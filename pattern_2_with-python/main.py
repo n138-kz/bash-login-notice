@@ -363,6 +363,11 @@ try:
 except (ValueError, KeyError):
     pass
 
+# shell-command: who
+import subprocess
+cmd = 'who'
+process = (subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8')
+
 # 起動
 runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 
@@ -477,6 +482,12 @@ discord_embed_json['fields'].append(discord_field_json)
 discord_field_json = {
     'name': '> Term',
     'value': f'''`{config['env']['os_dependent']['linux']['common']['term']}` `{config['env']['os_dependent']['linux']['common']['ssh_tty']}`''',
+    'inline': False,
+}
+discord_embed_json['fields'].append(discord_field_json)
+discord_field_json = {
+    'name': '> Login Users',
+    'value': process.strip(),
     'inline': False,
 }
 discord_embed_json['fields'].append(discord_field_json)
