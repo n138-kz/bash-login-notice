@@ -226,13 +226,20 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
-            'discord/webhook/embed/image/url',
-            'discord/webhook/embed/thumbnail/url',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
             try:
                 config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+            except (NameError, TypeError, KeyError):
+                pass
+        for key in [
+            'discord/webhook/embed/image/url',
+            'discord/webhook/embed/thumbnail/url',
+        ]:
+            key = key.split('/')
+            try:
+                config[key[0]][key[1]][key[2]][key[3]][key[4]] = config_custom[key[0]][key[1]][key[2]][key[3]][key[4]]
             except (NameError, TypeError, KeyError):
                 pass
         config['runner']['config']['files'].append(config_dir+config_file)
@@ -259,13 +266,20 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
-            'discord/webhook/embed/image/url',
-            'discord/webhook/embed/thumbnail/url',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
             try:
                 config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+            except (NameError, TypeError, KeyError):
+                pass
+        for key in [
+            'discord/webhook/embed/image/url',
+            'discord/webhook/embed/thumbnail/url',
+        ]:
+            key = key.split('/')
+            try:
+                config[key[0]][key[1]][key[2]][key[3]][key[4]] = config_custom[key[0]][key[1]][key[2]][key[3]][key[4]]
             except (NameError, TypeError, KeyError):
                 pass
         config['runner']['config']['files'].append(config_dir+config_file)
@@ -292,13 +306,20 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
-            'discord/webhook/embed/image/url',
-            'discord/webhook/embed/thumbnail/url',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
             try:
                 config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+            except (NameError, TypeError, KeyError):
+                pass
+        for key in [
+            'discord/webhook/embed/image/url',
+            'discord/webhook/embed/thumbnail/url',
+        ]:
+            key = key.split('/')
+            try:
+                config[key[0]][key[1]][key[2]][key[3]][key[4]] = config_custom[key[0]][key[1]][key[2]][key[3]][key[4]]
             except (NameError, TypeError, KeyError):
                 pass
         config['runner']['config']['files'].append(config_dir+config_file)
