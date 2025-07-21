@@ -14,6 +14,18 @@ config = {
             'name': sub('\.*', '', os.environ.get('HOSTNAME')),
         },
     },
+    'env': {
+        'user': os.environ.get('USER'),
+        'hostname': os.environ.get('HOSTNAME'),
+        'ssh_client': os.environ.get('SSH_CLIENT'),
+        'SSH_CONNECTION': os.environ.get('SSH_CONNECTION'),
+        'term': os.environ.get('TERM'),
+        'ssh_tty': os.environ.get('SSH_TTY'),
+        'lang': os.environ.get('LANG'),
+        'shell': os.environ.get('SHELL'),
+        'tmout': os.environ.get('TMOUT'),
+        'path': os.environ.get('PATH'),
+    },
 }
 
 print(json.dumps(config,indent=4))
