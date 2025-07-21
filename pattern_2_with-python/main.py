@@ -190,7 +190,6 @@ if config_loadstate^16==0:
         'ipinfo': {
             'auth': {
                 'token': '',
-                'type': 'Bearer',
             },
         },
     }
