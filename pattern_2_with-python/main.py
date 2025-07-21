@@ -81,6 +81,7 @@ config = {
     'runner': {
         'config': {
             'loadstate': 0,
+            'files': [],
         },
     },
 }
@@ -104,6 +105,7 @@ if os.path.exists(config_dir+config_file):
         with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
             config|=json.load(f)
             config_loadstate|=8
+            config['runner']['config']['files'].append(config_dir+config_file)
     except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
         pass
 config_dir = '~/.python/'
@@ -112,6 +114,7 @@ if os.path.exists(config_dir+config_file):
         with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
             config|=json.load(f)
             config_loadstate|=4
+            config['runner']['config']['files'].append(config_dir+config_file)
     except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
         pass
 config_dir = './'
@@ -120,6 +123,7 @@ if os.path.exists(config_dir+config_file):
         with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
             config|=json.load(f)
             config_loadstate|=2
+            config['runner']['config']['files'].append(config_dir+config_file)
     except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
         pass
 try:
