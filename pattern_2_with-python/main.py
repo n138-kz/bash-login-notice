@@ -17,6 +17,12 @@ config = {
             'name': sub('\.*', '', os.environ.get('HOSTNAME', '')),
         },
     },
+    'ipinfo': {
+        'auth': {
+            'token': '',
+            'type': 'Bearer',
+        },
+    },
     'env': {
         'os_dependent': {
             'linux': {
@@ -179,6 +185,12 @@ if config_loadstate^16==0:
         'discord': {
             'webhook': {
                 'url': 'https://discord.com/api/webhooks/URL/HERE',
+            },
+        },
+        'ipinfo': {
+            'auth': {
+                'token': '',
+                'type': 'Bearer',
             },
         },
     }
