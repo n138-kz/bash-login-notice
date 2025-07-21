@@ -12,7 +12,7 @@
     {
         "discord": {
             "webhook": {
-            "url": "https://discord.com/api/webhooks/URL/HERE",
+                "url": "https://discord.com/api/webhooks/URL/HERE",
                 "embed": {
                     "image": {
                         "url": "(option; なくてもOK)"
@@ -20,7 +20,10 @@
                     "thumbnail": {
                         "url": "(option; なくてもOK)"
                     }
-                }
+                },
+                "at_mention": [
+                    "数字のID（ロールメンションは頭に「&」をつける）"
+                ]
             }
         },
         "ipinfo": {

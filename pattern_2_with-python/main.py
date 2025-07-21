@@ -108,6 +108,8 @@ config = {
                     'url': '',
                 },
             },
+            "at_mention": [
+            ],
         },
         'avatar': {
             'url': 'https://hangstuck.com/wp-content/uploads/2020/08/bash-official-icon-512x512-1.png',
@@ -226,6 +228,7 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
+            'discord/webhook/at_mention',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
@@ -266,6 +269,7 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
+            'discord/webhook/at_mention',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
@@ -306,6 +310,7 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
+            'discord/webhook/at_mention',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
@@ -425,6 +430,7 @@ discord_payload_json = {
 }
 discord_embed_json = {
     'title': 'Login Notice',
+    'description': '',
     'color': 0xc0c0c0,
     'footer': {
         'text': config['env']['os_dependent']['linux']['common']['hostname'],
@@ -439,6 +445,12 @@ discord_embed_json = {
     },
     'fields': [],
 }
+try:
+    if len(config['discord']['webhook']['at_mention'])>0:
+        for item in config['discord']['webhook']['at_mention']:
+            discord_embed_json['description'] = f'<@{item}>'
+except (ValueError, KeyError):
+    pass
 discord_field_json = {
     'name': '',
     'value': '',
