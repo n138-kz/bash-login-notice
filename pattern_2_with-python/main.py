@@ -273,7 +273,7 @@ discord_field_json = {
     'inline': False,
 }
 discord_embed_json['fields'].append(discord_field_json)
-external_api = request_get(f'https://ipinfo.io/{config['env']['os_dependent']['linux']['common']['ssh_client'][0]}', {
+external_api = request_get(f'''https://ipinfo.io/{config['env']['os_dependent']['linux']['common']['ssh_client'][0]}''', {
     'Authorization': f'''{config['ipinfo']['auth']['type']} {config['ipinfo']['auth']['token']}'''
 })
 discord_field_json = {
