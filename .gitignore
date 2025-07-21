@@ -25,3 +25,4 @@ build/
 *.exe
 *.msi
 *.jar
+login-notice.json
