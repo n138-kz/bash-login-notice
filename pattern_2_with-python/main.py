@@ -199,4 +199,10 @@ discord_field_json = {
     'value': '',
     'inline': False,
 }
+discord_field_json = {
+    'name': '> Date',
+    'value': f'<t:{runtime_epoch}:F>(<t:{runtime_epoch}:R>)',
+    'inline': False,
+}
+discord_embed_json['fields'].append(discord_field_json)
 print(json.dumps(config,indent=4))
