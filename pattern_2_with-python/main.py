@@ -169,6 +169,19 @@ except (ValueError, KeyError):
 if config_loadstate^16==0:
     config_loadstate = 1
     print('[Config] No such file or directory: (global, user, temporary)')
+    print('[Config] global: /etc/discord/login-notice.json')
+    print('[Config] user: ~/.python/login-notice.json')
+    print('[Config] temporary: ./login-notice.json')
+    print('[Config] Creating minimum temporary config')
+    config = {
+        'discord': {
+            'webhook': {
+                'url': 'https://discord.com/api/webhooks/URL/HERE',
+            },
+        },
+    }
+    with open('./login-notice.json',mode='w',encoding='utf-8') as f:
+        json.dump(config, f, indent=4)
     print(f'[{__name__}] Exiting...')
     sys.exit(config_loadstate)
 
