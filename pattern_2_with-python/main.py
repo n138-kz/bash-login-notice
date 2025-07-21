@@ -197,6 +197,8 @@ runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 
 # discord_payload_json 組み立て
 discord_payload_json = {
+    'username': config['env']['os_dependent']['linux']['common']['hostname'],
+    'avatar_url': config['discord']['avatar']['url'],
     'embeds': [],
 }
 discord_embed_json = {
