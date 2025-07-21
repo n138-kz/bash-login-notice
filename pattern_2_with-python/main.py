@@ -55,9 +55,9 @@ def is_private_ipv6(ip_address_str: str) -> bool:
     リンクローカルユニキャスト	1111 1110 10	fe80::/10
     グローバルユニキャスト	   上記以外
     """
-    ip_address_str_0 = ip_address_str.split(':')[0]
-    ip_address_str_0 = bin(int(ip_address_str_0, 16))[2:]
     try:
+        ip_address_str_0 = ip_address_str.split(':')[0]
+        ip_address_str_0 = bin(int(ip_address_str_0, 16))[2:]
         if False:
             pass
         elif ip_address_str_0[:8] == '1'*8:
