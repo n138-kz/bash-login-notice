@@ -100,6 +100,14 @@ config = {
     'discord': {
         'webhook': {
             'url': 'https://discord.com/api/webhooks/',
+            'embed': {
+                'image': {
+                    'url': '',
+                },
+                'thumbnail': {
+                    'url': '',
+                },
+            },
         },
         'avatar': {
             'url': 'https://hangstuck.com/wp-content/uploads/2020/08/bash-official-icon-512x512-1.png',
@@ -218,6 +226,8 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
+            'discord/webhook/embed/image/url',
+            'discord/webhook/embed/thumbnail/url',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
@@ -249,6 +259,8 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
+            'discord/webhook/embed/image/url',
+            'discord/webhook/embed/thumbnail/url',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
@@ -280,6 +292,8 @@ if os.path.exists(config_dir+config_file):
         for key in [
             'discord/avatar/url',
             'discord/avatar/name',
+            'discord/webhook/embed/image/url',
+            'discord/webhook/embed/thumbnail/url',
             'ipinfo/auth/type',
         ]:
             key = key.split('/')
@@ -396,6 +410,12 @@ discord_embed_json = {
         'icon_url': config['discord']['avatar']['url'],
     },
     'timestamp': datetime.datetime.fromtimestamp(runtime_epoch, tz=datetime.timezone.utc).isoformat(),
+    'image': {
+        'url': config['discord']['webhook']['embed']['image']['url'],
+    },
+    'thumbnail': {
+        'url': config['discord']['webhook']['embed']['thumbnail']['url'],
+    },
     'fields': [],
 }
 discord_field_json = {
