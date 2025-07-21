@@ -2,6 +2,7 @@ import os
 import sys
 from re import sub
 import json
+import math
 import requests
 
 # config
@@ -174,5 +175,8 @@ try:
     config['env']['tmout'] = int(config['env']['tmout'])
 except (ValueError, KeyError):
     pass
+
+# 起動
+runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 
 print(json.dumps(config,indent=4))
