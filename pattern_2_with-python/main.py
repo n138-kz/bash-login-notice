@@ -164,7 +164,7 @@ if os.path.exists(config_dir+config_file):
             key = key.split('/')
             try:
                 config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
-            except (NameError, TypeError):
+            except (NameError, TypeError, KeyError):
                 config_loadstate^=2
         for key in [
             'discord/avatar/url',
@@ -174,7 +174,7 @@ if os.path.exists(config_dir+config_file):
             key = key.split('/')
             try:
                 config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
-            except (NameError, TypeError):
+            except (NameError, TypeError, KeyError):
                 pass
         config['runner']['config']['files'].append(config_dir+config_file)
     except (FileNotFoundError, PermissionError):
