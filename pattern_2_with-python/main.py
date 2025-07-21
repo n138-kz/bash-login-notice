@@ -3,6 +3,7 @@ import sys
 from re import sub
 import json
 import math
+import datetime
 import requests
 
 # config
@@ -182,5 +183,15 @@ runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 # discord_payload_json 組み立て
 discord_payload_json = {
     'embeds': [],
+}
+discord_embed_json = {
+    'title': 'Login Notice',
+    'color': 0xc0c0c0,
+    'footer': {
+        'text': config['env']['os_dependent']['linux']['common']['hostname'],
+        'icon_url': config['discord']['avatar']['url'],
+    },
+    'timestamp': datetime.datetime.fromtimestamp(runtime_epoch, tz=datetime.timezone.utc).isoformat(),
+    'fields': [],
 }
 print(json.dumps(config,indent=4))
