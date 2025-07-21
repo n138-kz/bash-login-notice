@@ -6,6 +6,25 @@ import math
 import datetime
 import requests
 
+# http/get
+def request_get(url='', header={}):
+    try:
+        api_request = requests.get(url, header)
+        api_request.raise_for_status() # 200番台以外のステータスコードの場合、HTTPErrorを発生させる
+        return api_request.json()
+    except requests.exceptions.HTTPError as errh:
+        print(f"HTTPエラーが発生しました: {errh}")
+        return None
+    except requests.exceptions.ConnectionError as errc:
+        print(f"接続エラーが発生しました: {errc}")
+        return None
+    except requests.exceptions.Timeout as errt:
+        print(f"タイムアウトエラーが発生しました: {errt}")
+        return None
+    except requests.exceptions.RequestException as err:
+        print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
+        return None
+
 # config
 config = {
     'discord': {
@@ -254,9 +273,12 @@ discord_field_json = {
     'inline': False,
 }
 discord_embed_json['fields'].append(discord_field_json)
+external_api = request_get(f'https://ipinfo.io/{config['env']['os_dependent']['linux']['common']['ssh_client'][0]}', {
+    'Authorization': f'''{config['ipinfo']['auth']['type']} {config['ipinfo']['auth']['token']}'''
+})
 discord_field_json = {
     'name': '',
-    'value': '',
+    'value': f'''{external_api['country']} {external_api['region']} {external_api['city']}\n{external_api['org']}\n{external_api['hostname']}\n''',
     'inline': False,
 }
 discord_embed_json['fields'].append(discord_field_json)
