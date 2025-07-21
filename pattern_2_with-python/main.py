@@ -167,6 +167,16 @@ if os.path.exists(config_dir+config_file):
                 config_loadstate|=2
             except (json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
                 pass
+            try:
+                config['ipinfo']['auth']['token'] = json.load(f)['ipinfo']['auth']['token']
+                config_loadstate|=2
+            except (json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
+            try:
+                config['ipinfo']['auth']['type'] = json.load(f)['ipinfo']['auth']['type']
+                config_loadstate|=2
+            except (json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
             config['runner']['config']['files'].append(config_dir+config_file)
     except (FileNotFoundError, PermissionError):
         pass
