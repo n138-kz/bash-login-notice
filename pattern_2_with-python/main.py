@@ -474,8 +474,9 @@ print(json.dumps(config,indent=4))
 
 # Push to Discord
 try: 
-    request=requests.post(config['discord']['webhook']['url'], json=discord_payload_json)
+    request=requests.post(config['discord']['webhook']['url']+'?wait=true', json=discord_payload_json)
     request.raise_for_status()
+    print(json.dumps(request.json(),indent=4))
 except requests.exceptions.HTTPError as errh:
     print(f"HTTPエラーが発生しました: {errh}")
 except requests.exceptions.ConnectionError as errc:
