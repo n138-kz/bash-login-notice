@@ -417,7 +417,7 @@ discord_field_json = {
 discord_embed_json['fields'].append(discord_field_json)
 discord_field_json = {
     'name': '> From',
-    'value': f'''[{config['env']['os_dependent']['linux']['common']['ssh_client'][0]}:{config['env']['os_dependent']['linux']['common']['ssh_client'][1]}](https://ipinfo.io/{config['env']['os_dependent']['linux']['common']['ssh_client'][0]})\n{external_api_ipinfo}\n''',
+    'value': f'''[{config['env']['os_dependent']['linux']['common']['ssh_client'][0]}:{config['env']['os_dependent']['linux']['common']['ssh_client'][1]}](https://ipinfo.io/{config['env']['os_dependent']['linux']['common']['ssh_client'][0]})\n{external_api}\n''',
     'inline': False,
 }
 discord_embed_json['fields'].append(discord_field_json)
