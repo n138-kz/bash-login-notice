@@ -6,6 +6,45 @@ import math
 import datetime
 import requests
 
+# IPv4 Is Private address?
+def is_private_ipv4(ip_address_str: str) -> bool:
+    import ipaddress
+    """
+    指定されたIPv4アドレスがプライベートIPアドレス (RFC 1918) であるかを判断します。
+
+    プライベートIPアドレスレンジ:
+    - 10.0.0.0/8 (10.0.0.0 から 10.255.255.255)
+    - 172.16.0.0/12 (172.16.0.0 から 172.31.255.255)
+    - 192.168.0.0/16 (192.168.0.0 から 192.168.255.255)
+
+    Args:
+        ip_address_str (str): 判定したいIPv4アドレスの文字列。
+
+    Returns:
+        bool: プライベートIPアドレスであれば True、そうでなければ False。
+    """
+    # プライベートIPアドレスのネットワークレンジを定義
+    private_networks = [
+        ipaddress.ip_network('10.0.0.0/8'),
+        ipaddress.ip_network('172.16.0.0/12'),
+        ipaddress.ip_network('192.168.0.0/16')
+    ]
+
+    try:
+        # 入力されたIPアドレスをIPv4アドレスオブジェクトに変換
+        ip_addr = ipaddress.ip_address(ip_address_str)
+
+        # 各プライベートネットワークレンジに含まれるかチェック
+        for network in private_networks:
+            if ip_addr in network:
+                return True
+        return False
+
+    except ValueError:
+        # 無効なIPアドレス文字列が入力された場合
+        print(f"エラー: 無効なIPアドレス形式 '{ip_address_str}'")
+        return False
+
 # IPv6 Is Private address?
 def is_private_ipv6(ip_address_str: str) -> bool:
     import ipaddress
@@ -267,6 +306,15 @@ runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 
 if False:
     pass
+elif is_private_ipv4(config['env']['os_dependent']['linux']['common']['ssh_client'][0]):
+    external_api = {
+        'ip': config['env']['os_dependent']['linux']['common']['ssh_client'][0],
+    }
+    external_api = [
+        f'''[RFC 1918 IPv4 Private](https://ipinfo.io/{external_api['ip']})'''.strip(),
+    ]
+    external_api = [item for item in external_api if item != '']
+    external_api = '\n'.join(external_api)
 elif is_private_ipv6(config['env']['os_dependent']['linux']['common']['ssh_client'][0]):
     external_api = {
         'ip': config['env']['os_dependent']['linux']['common']['ssh_client'][0],
