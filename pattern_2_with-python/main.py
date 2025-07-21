@@ -217,4 +217,12 @@ discord_field_json = {
     'inline': False,
 }
 discord_embed_json['fields'].append(discord_field_json)
+discord_field_json = {
+    'name': '> Term',
+    'value': f'''`{config['env']['os_dependent']['linux']['common']['term']}` `{config['env']['os_dependent']['linux']['common']['ssh_tty']}`''',
+    'inline': False,
+}
+discord_embed_json['fields'].append(discord_field_json)
+discord_payload_json['embeds'].append(discord_embed_json)
 print(json.dumps(config,indent=4))
+print(json.dumps(discord_payload_json,indent=4))
