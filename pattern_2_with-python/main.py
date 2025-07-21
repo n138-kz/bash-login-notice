@@ -6,6 +6,37 @@ import math
 import datetime
 import requests
 
+# IPv6 Is Private address?
+def is_private_ipv6(ip_address_str: str) -> bool:
+    import ipaddress
+    """
+    未指定(Unspecified) |     00…0 (128 ビット)	::/128
+    ループバック               0000 0000 ... 0001 (128 ビット)	::1/128
+    マルチキャスト             1111 1111	ff00::/8
+    リンクローカルユニキャスト	1111 1110 10	fe80::/10
+    グローバルユニキャスト	   上記以外
+    """
+    ip_address_str_0 = ip_address_str.split(':')[0]
+    ip_address_str_0 = bin(int(ip_address_str_0, 16))[2:]
+    try:
+        if False:
+            pass
+        elif ip_address_str_0[:8] == '1'*8:
+            # マルチキャスト ff00::/8
+            return True
+        elif ip_address_str_0[:10] == '1'*7 + '010':
+            # リンクローカルユニキャスト fe80::/10
+            return True
+        elif ip_address_str == ipaddress.IPv6Address('::'):
+            # 未指定(Unspecified) ::/128
+            return True
+        elif ip_address_str == ipaddress.IPv6Address('::1'):
+            # ループバック ::1/128
+            return True
+        return False
+    except ValueError:
+        return False
+
 # http/get
 def request_get(url='', header={}):
     try:
@@ -234,6 +265,12 @@ except (ValueError, KeyError):
 # 起動
 runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 
+if False:
+    pass
+elif is_private_ipv6(config['env']['os_dependent']['linux']['common']['ssh_client'][0]):
+    external_api = {
+        'ip': config['env']['os_dependent']['linux']['common']['ssh_client'][0],
+    }
 # discord_payload_json 組み立て
 discord_payload_json = {
     'username': config['env']['os_dependent']['linux']['common']['hostname'],
