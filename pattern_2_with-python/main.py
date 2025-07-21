@@ -194,4 +194,9 @@ discord_embed_json = {
     'timestamp': datetime.datetime.fromtimestamp(runtime_epoch, tz=datetime.timezone.utc).isoformat(),
     'fields': [],
 }
+discord_field_json = {
+    'name': '',
+    'value': '',
+    'inline': False,
+}
 print(json.dumps(config,indent=4))
