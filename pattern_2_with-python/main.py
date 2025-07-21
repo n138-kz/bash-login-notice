@@ -205,4 +205,10 @@ discord_field_json = {
     'inline': False,
 }
 discord_embed_json['fields'].append(discord_field_json)
+discord_field_json = {
+    'name': '> User',
+    'value': f'''`{config['env']['os_dependent']['linux']['common']['user']}@{config['env']['os_dependent']['linux']['common']['hostname']}`''',
+    'inline': False,
+}
+discord_embed_json['fields'].append(discord_field_json)
 print(json.dumps(config,indent=4))
