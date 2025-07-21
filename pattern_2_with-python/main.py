@@ -4,6 +4,7 @@ from re import sub
 import json
 import requests
 
+# config
 config = {
     'discord': {
         'webhook': {
@@ -103,7 +104,18 @@ config_dir = '/etc/discord/'
 if os.path.exists(config_dir+config_file):
     try:
         with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
-            config|=json.load(f)
+            try:
+                config['discord']['webhook']['url'] = json.load(f)['discord']['webhook']['url']
+            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
+            try:
+                config['discord']['webhook']['url'] = json.load(f)['discord']['avatar']['url']
+            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
+            try:
+                config['discord']['webhook']['url'] = json.load(f)['discord']['avatar']['name']
+            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
             config_loadstate|=8
             config['runner']['config']['files'].append(config_dir+config_file)
     except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
@@ -112,7 +124,18 @@ config_dir = '~/.python/'
 if os.path.exists(config_dir+config_file):
     try:
         with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
-            config|=json.load(f)
+            try:
+                config['discord']['webhook']['url'] = json.load(f)['discord']['webhook']['url']
+            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
+            try:
+                config['discord']['webhook']['url'] = json.load(f)['discord']['avatar']['url']
+            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
+            try:
+                config['discord']['webhook']['url'] = json.load(f)['discord']['avatar']['name']
+            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
             config_loadstate|=4
             config['runner']['config']['files'].append(config_dir+config_file)
     except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
@@ -121,7 +144,18 @@ config_dir = './'
 if os.path.exists(config_dir+config_file):
     try:
         with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
-            config|=json.load(f)
+            try:
+                config['discord']['webhook']['url'] = json.load(f)['discord']['webhook']['url']
+            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
+            try:
+                config['discord']['webhook']['url'] = json.load(f)['discord']['avatar']['url']
+            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
+            try:
+                config['discord']['webhook']['url'] = json.load(f)['discord']['avatar']['name']
+            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                pass
             config_loadstate|=2
             config['runner']['config']['files'].append(config_dir+config_file)
     except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
