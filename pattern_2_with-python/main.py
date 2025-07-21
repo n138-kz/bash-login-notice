@@ -432,7 +432,6 @@ print(json.dumps(discord_payload_json,indent=4))
 
 # Push to Discord
 try: 
-    print(config['discord']['webhook']['url'])
     request=requests.post(config['discord']['webhook']['url'], json=discord_payload_json)
     request.raise_for_status()
 except requests.exceptions.HTTPError as errh:
