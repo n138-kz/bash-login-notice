@@ -27,5 +27,9 @@ config = {
         'path': os.environ.get('PATH', '').split(sep=':'),
     },
 }
+try:
+    config['env']['tmout'] = int(config['env']['tmout'])
+except (ValueError, KeyError):
+    pass
 
 print(json.dumps(config,indent=4))
