@@ -445,6 +445,12 @@ discord_embed_json = {
     },
     'fields': [],
 }
+try:
+    if len(config['discord']['webhook']['at_mention'])>0:
+        for item in config['discord']['webhook']['at_mention']:
+            discord_embed_json['description'] = f'<@{item}>'
+except (ValueError, KeyError):
+    pass
 discord_field_json = {
     'name': '',
     'value': '',
