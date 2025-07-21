@@ -26,6 +26,11 @@ config = {
         'tmout': os.environ.get('TMOUT', ''),
         'path': os.environ.get('PATH', '').split(sep=':'),
     },
+    'runner': {
+        'config': {
+            'loadstate': 0,
+        },
+    },
 }
 try:
     config['env']['tmout'] = int(config['env']['tmout'])
