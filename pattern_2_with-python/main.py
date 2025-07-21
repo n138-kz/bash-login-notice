@@ -179,4 +179,8 @@ except (ValueError, KeyError):
 # 起動
 runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 
+# discord_payload_json 組み立て
+discord_payload_json = {
+    'embeds': [],
+}
 print(json.dumps(config,indent=4))
