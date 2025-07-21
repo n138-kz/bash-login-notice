@@ -202,20 +202,31 @@ if os.path.exists(config_dir+config_file):
     try:
         with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
             try:
-                config['discord']['webhook']['url'] = json.load(f)['discord']['webhook']['url']
-            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
-                pass
+                config_custom = json.load(f)
+                config_loadstate|=8
+            except (json.JSONDecodeError, UnicodeDecodeError):
+                config_loadstate^=8
+        for key in [
+            'discord/webhook/url',
+            'ipinfo/auth/token',
+        ]:
+            key = key.split('/')
             try:
-                config['discord']['webhook']['url'] = json.load(f)['discord']['avatar']['url']
-            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
-                pass
+                config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+            except (NameError, TypeError, KeyError):
+                config_loadstate^=8
+        for key in [
+            'discord/avatar/url',
+            'discord/avatar/name',
+            'ipinfo/auth/type',
+        ]:
+            key = key.split('/')
             try:
-                config['discord']['webhook']['url'] = json.load(f)['discord']['avatar']['name']
-            except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+                config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+            except (NameError, TypeError, KeyError):
                 pass
-            config_loadstate|=8
-            config['runner']['config']['files'].append(config_dir+config_file)
-    except (FileNotFoundError, PermissionError, json.JSONDecodeError, UnicodeDecodeError, NameError, TypeError):
+        config['runner']['config']['files'].append(config_dir+config_file)
+    except (FileNotFoundError, PermissionError):
         pass
 config_dir = '~/.python/'
 if os.path.exists(config_dir+config_file):
