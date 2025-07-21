@@ -184,7 +184,7 @@ config = {
     },
 }
 
-# 1. load the /etc/discord/login-notice.json
+# 1. load the /etc/python/login-notice.json
 # 2. load the ~/.python/login-notice.json and override
 # 3. load the ./login-notice.json and override
 config_file = 'login-notice.json'
@@ -195,9 +195,9 @@ config_loadstate = 16 # 0b10000
 #   ||||+-  1) エラー扱い
 #   |||+--  2) Load succeede ./login-notice.json
 #   ||+---  4) Load succeede ~/.python/login-notice.json
-#   |+----  8) Load succeede /etc/discord/login-notice.json
+#   |+----  8) Load succeede /etc/python/login-notice.json
 #   +----- 16) 桁揃え用（非使用）
-config_dir = '/etc/discord/'
+config_dir = '/etc/python/'
 if os.path.exists(config_dir+config_file):
     try:
         with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
@@ -297,7 +297,7 @@ except (ValueError, KeyError):
 if config_loadstate^16==0:
     config_loadstate = 1
     print('[Config] No such file or directory: (global, user, temporary)')
-    print('[Config] global: /etc/discord/login-notice.json')
+    print('[Config] global: /etc/python/login-notice.json')
     print('[Config] user: ~/.python/login-notice.json')
     print('[Config] temporary: ./login-notice.json')
     print('[Config] Creating minimum temporary config')
