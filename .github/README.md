@@ -1,5 +1,7 @@
 # [bash-login-notice](https://github.com/n138-kz/bash-login-notice)
 
+![GitHub Extra Pins](https://github-readme-stats.vercel.app/api/pin/?locale=ja&username=n138-kz&repo=bash-login-notice&show_owner=true&theme=graywhite)
+
 ## Activity
 
 [![GitHub repo license](https://img.shields.io/github/license/n138-kz/bash-login-notice)](/LICENSE)
@@ -20,7 +22,6 @@
 
 - [![](https://www.google.com/s2/favicons?size=64&domain=https://github.com)bash-login-notice](https://github.com/n138-kz/bash-login-notice/)
 
-![GitHub Extra Pins](https://github-readme-stats.vercel.app/api/pin/?locale=ja&username=n138-kz&repo=bash-login-notice&show_owner=true&theme=graywhite)
 
 ## License
 
