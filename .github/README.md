@@ -23,9 +23,18 @@
 ![og:image](url)
 ![GitHub stars](https://img.shields.io/github/stars/n138-kz/bash-login-notice?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/n138-kz/bash-login-notice?style=social)
-  
+
+```http
+GET https://github-readme-stats.vercel.app/api?username=n138-kz&show_icons=true&theme=default
+```
 ![GitHub Extra Pins](https://github-readme-stats.vercel.app/api?username=n138-kz&show_icons=true&theme=default)
+```http
+GET https://github-readme-stats.vercel.app/api?username=n138-kz&show_icons=true&theme=default&show=reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage
+```
 ![GitHub Extra Pins](https://github-readme-stats.vercel.app/api?username=n138-kz&show_icons=true&theme=default&show=reviews,discussions_started,discussions_answered,prs_merged,prs_merged_percentage)
+```http
+GET https://github-readme-stats.vercel.app/api/pin/?username=n138-kz&repo=bash-login-notice
+```
 ![GitHub Extra Pins](https://github-readme-stats.vercel.app/api/pin/?username=n138-kz&repo=bash-login-notice)
 
 ## License
