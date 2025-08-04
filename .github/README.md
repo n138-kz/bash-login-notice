@@ -20,7 +20,9 @@
 
 - [![](https://www.google.com/s2/favicons?size=64&domain=https://github.com)bash-login-notice](https://github.com/n138-kz/bash-login-notice/)
 
-[og:image](url)
+![og:image](url)
+![GitHub stars](https://img.shields.io/github/stars/ユーザー名/リポジトリ名?style=social)
+![GitHub forks](https://img.shields.io/github/forks/ユーザー名/リポジトリ名?style=social)
 
 ## License
 
