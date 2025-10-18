@@ -47,7 +47,7 @@ jobs:
     - run: |
         ls -lhA
         tree
-        env
+        env | grep ^GITHUB
       if: always()
       working-directory: ./pattern_2_with-python/
     - name: cat login-notice.json
