@@ -509,3 +509,5 @@ def main():
         print(f"タイムアウトエラーが発生しました: {errt}")
     except requests.exceptions.RequestException as err:
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
+if __name__ == '__main__':
+    main()
