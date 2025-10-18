@@ -41,3 +41,5 @@ jobs:
       run: |
         pytest *.py
     - run: ls -lhA
+      if: always()
+      
