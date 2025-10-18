@@ -49,13 +49,13 @@ jobs:
         tree
       if: always()
       working-directory: ./pattern_2_with-python/
-    - run: |
+    - name: cat login-notice.json
+      run: |
         cat login-notice.json | jq -c | base64
       if: always()
       working-directory: ./pattern_2_with-python/
     - name: upload config
       uses: actions/upload-artifact@v2
-        with:
-          name: sample-config
-          path: ./login-notice.json
-          
+      with:
+        name: sampleconfig
+        path: ./pattern_2_with-python/login-notice.json
