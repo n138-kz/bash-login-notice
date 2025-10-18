@@ -47,6 +47,7 @@ jobs:
     - run: |
         ls -lhA
         tree
+        env
       if: always()
       working-directory: ./pattern_2_with-python/
     - name: cat login-notice.json

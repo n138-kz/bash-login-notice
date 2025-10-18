@@ -156,6 +156,9 @@ def main():
                         'xdg_runtime_dir': os.environ.get('XDG_RUNTIME_DIR', ''),
                         'dbus_session_bus_address': os.environ.get('DBUS_SESSION_BUS_ADDRESS', ''),
                     },
+                    'github': {
+                        'token': '',
+                    },
                 },
                 'windows': {
                     'system': {
