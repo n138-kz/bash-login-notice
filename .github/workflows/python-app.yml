@@ -40,3 +40,4 @@ jobs:
       working-directory: ./pattern_2_with-python/
       run: |
         pytest *.py
+    - run: ls -lhA
