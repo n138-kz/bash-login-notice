@@ -512,7 +512,7 @@ def main():
         return 0
     except requests.exceptions.HTTPError as errh:
         print(f"HTTPエラーが発生しました: {errh}")
-        print(errh)
+        print(errh.status_code)
         return 1
     except requests.exceptions.ConnectionError as errc:
         print(f"接続エラーが発生しました: {errc}")
