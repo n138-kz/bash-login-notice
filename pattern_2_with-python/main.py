@@ -95,6 +95,8 @@ def request_get(url='', header={}):
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
         return None
 
+def test_main():
+    assert main() == 0
 def main():
     # config
     config = {
@@ -501,13 +503,18 @@ def main():
         request=requests.post(config['discord']['webhook']['url']+'?wait=true', json=discord_payload_json)
         request.raise_for_status()
         print(json.dumps(request.json(),indent=4))
+        return 0
     except requests.exceptions.HTTPError as errh:
         print(f"HTTPエラーが発生しました: {errh}")
+        return 1
     except requests.exceptions.ConnectionError as errc:
         print(f"接続エラーが発生しました: {errc}")
+        return 1
     except requests.exceptions.Timeout as errt:
         print(f"タイムアウトエラーが発生しました: {errt}")
+        return 1
     except requests.exceptions.RequestException as err:
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
+        return 1
 if __name__ == '__main__':
     main()
