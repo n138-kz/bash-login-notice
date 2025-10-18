@@ -403,6 +403,7 @@ def main():
             json.dump(config, f, indent=4)
     except (FileNotFoundError, PermissionError):
         pass
+    print(config['env']['os_dependent']['github'])
 
     try:
         config['env']['tmout'] = int(config['env']['tmout'])
