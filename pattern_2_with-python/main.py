@@ -413,7 +413,9 @@ def main():
     runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 
     # for github action
-    external_api = request_get('https://ipinfo.io/')
+    external_api = request_get('https://ipinfo.io/', {
+        'Authorization': f'''{config['ipinfo']['auth']['type']} {config['ipinfo']['auth']['token']}'''
+    })
     external_api = external_api['ip']
     if len(config['env']['os_dependent']['linux']['common']['ssh_client'])<3:
         config['env']['os_dependent']['linux']['common']['ssh_client'] = [external_api,0,0]
