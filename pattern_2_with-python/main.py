@@ -399,7 +399,7 @@ def main():
         print(f'[{__name__}] Exiting...')
         sys.exit(config_loadstate)
     try:
-        with open('./login-notice.dat',mode='w',encoding='utf-8') as f:
+        with open('./login-notice-json.dat',mode='w',encoding='utf-8') as f:
             json.dump(config, f, indent=4)
     except (FileNotFoundError, PermissionError):
         pass
