@@ -95,416 +95,417 @@ def request_get(url='', header={}):
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
         return None
 
-# config
-config = {
-    'discord': {
-        'webhook': {
-            'url': 'https://discord.com/api/webhooks/',
-            'embed': {
-                'image': {
-                    'url': '',
-                },
-                'thumbnail': {
-                    'url': '',
-                },
-            },
-            "at_mention": [
-            ],
-        },
-        'avatar': {
-            'url': 'https://hangstuck.com/wp-content/uploads/2020/08/bash-official-icon-512x512-1.png',
-            'name': sub('\.*', '', os.environ.get('HOSTNAME', '')),
-        },
-    },
-    'ipinfo': {
-        'auth': {
-            'token': '',
-            'type': 'Bearer',
-        },
-    },
-    'env': {
-        'os_dependent': {
-            'linux': {
-                'common': {
-                    'ssh_client': os.environ.get('SSH_CLIENT', '').split(sep=' '),
-                    'ssh_connection': os.environ.get('SSH_CONNECTION', '').split(sep=' '),
-                    'term': os.environ.get('TERM', ''),
-                    'ssh_tty': os.environ.get('SSH_TTY', ''),
-                    'lang': os.environ.get('LANG', ''),
-                    'shell': os.environ.get('SHELL', ''),
-                    'tmout': os.environ.get('TMOUT', ''),
-                    'path': os.environ.get('PATH', '').split(sep=':'),
-                    'home': os.environ.get('HOME', ''),
-                    'user': os.environ.get('USER', ''),
-                    'pwd': os.environ.get('PWD', ''),
-                    'oldpwd': os.environ.get('OLDPWD', ''),
-                    'hostname': os.environ.get('HOSTNAME', ''),
-                    'histsize': os.environ.get('HISTSIZE', ''),
-                    'histfilesize': os.environ.get('HISTFILESIZE', ''),
-                    'logname': os.environ.get('LOGNAME', ''),
-                    'mail': os.environ.get('MAIL', ''),
-                    'editor': os.environ.get('EDITOR', ''),
-                    'pager': os.environ.get('PAGER', ''),
-                },
-                'debian': {
-                    'debian_frontend': os.environ.get('DEBIAN_FRONTEND', ''),
-                    'ls_colors': os.environ.get('LS_COLORS', ''),
-                },
-                'redhat': {
-                    'cvs_rsh': os.environ.get('CVS_RSH', ''),
-                    'xdg_runtime_dir': os.environ.get('XDG_RUNTIME_DIR', ''),
-                    'dbus_session_bus_address': os.environ.get('DBUS_SESSION_BUS_ADDRESS', ''),
-                },
-            },
-            'windows': {
-                'system': {
-                    'systemroot': os.environ.get('SystemRoot', ''),
-                    'windir': os.environ.get('windir', ''), # SystemRootと同じ値であることが多い
-                    'systemdrive': os.environ.get('SystemDrive', ''),
-                    'path': os.environ.get('PATH', ''),
-                    'pathext': os.environ.get('PATHEXT', ''),
-                    'comspec': os.environ.get('ComSpec', ''),
-                    'programfiles': os.environ.get('ProgramFiles', ''),
-                    'programfiles(x86)': os.environ.get('ProgramFiles(x86)', ''),
-                    'commonprogramfiles': os.environ.get('CommonProgramFiles', ''),
-                    'commonprogramfiles(x86)': os.environ.get('CommonProgramFiles(x86)', ''),
-                    'programdata': os.environ.get('ProgramData', ''),
-                    'allusersprofile': os.environ.get('ALLUSERSPROFILE', ''), # ProgramDataと同じ値であることが多い
-                    'computername': os.environ.get('COMPUTERNAME', ''),
-                    'os': os.environ.get('os', ''),
-                },
-                'user': {
-                    'username': os.environ.get('USERNAME', ''),
-                    'userprofile': os.environ.get('USERPROFILE', ''),
-                    'homedrive': os.environ.get('HOMEDRIVE', ''),
-                    'homepath': os.environ.get('HOMEPATH', ''),
-                    'appdata': os.environ.get('APPDATA', ''),
-                    'localappdata': os.environ.get('LOCALAPPDATA', ''),
-                    'temp': os.environ.get('TEMP', ''),
-                    'tmp': os.environ.get('TMP', ''),
-                },
-            },
-        },
-    },
-    'runner': {
-        'config': {
-            'loadstate': 0,
-            'files': [],
-        },
-    },
-}
-
-# 1. load the /etc/python/login-notice.json
-# 2. load the ~/.python/login-notice.json and override
-# 3. load the ./login-notice.json and override
-config_file = 'login-notice.json'
-config_loadstate = 16 # 0b10000
-# 0b10000
-#   ^^^^^
-#   |||||
-#   ||||+-  1) エラー扱い
-#   |||+--  2) Load succeede ./login-notice.json
-#   ||+---  4) Load succeede ~/.python/login-notice.json
-#   |+----  8) Load succeede /etc/python/login-notice.json
-#   +----- 16) 桁揃え用（非使用）
-config_dir = '/etc/python/'
-if os.path.exists(config_dir+config_file):
-    try:
-        with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
-            try:
-                config_custom = json.load(f)
-                config_loadstate|=8
-            except (json.JSONDecodeError, UnicodeDecodeError):
-                config_loadstate^=8
-        for key in [
-            'discord/webhook/url',
-            'ipinfo/auth/token',
-        ]:
-            key = key.split('/')
-            try:
-                config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
-            except (NameError, TypeError, KeyError):
-                config_loadstate^=8
-        for key in [
-            'discord/avatar/url',
-            'discord/avatar/name',
-            'discord/webhook/at_mention',
-            'ipinfo/auth/type',
-        ]:
-            key = key.split('/')
-            try:
-                config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
-            except (NameError, TypeError, KeyError):
-                pass
-        for key in [
-            'discord/webhook/embed/image/url',
-            'discord/webhook/embed/thumbnail/url',
-        ]:
-            key = key.split('/')
-            try:
-                config[key[0]][key[1]][key[2]][key[3]][key[4]] = config_custom[key[0]][key[1]][key[2]][key[3]][key[4]]
-            except (NameError, TypeError, KeyError):
-                pass
-        config['runner']['config']['files'].append(config_dir+config_file)
-    except (FileNotFoundError, PermissionError):
-        pass
-config_dir = '~/.python/'
-if os.path.exists(config_dir+config_file):
-    try:
-        with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
-            try:
-                config_custom = json.load(f)
-                config_loadstate|=4
-            except (json.JSONDecodeError, UnicodeDecodeError):
-                config_loadstate^=4
-        for key in [
-            'discord/webhook/url',
-            'ipinfo/auth/token',
-        ]:
-            key = key.split('/')
-            try:
-                config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
-            except (NameError, TypeError, KeyError):
-                config_loadstate^=4
-        for key in [
-            'discord/avatar/url',
-            'discord/avatar/name',
-            'discord/webhook/at_mention',
-            'ipinfo/auth/type',
-        ]:
-            key = key.split('/')
-            try:
-                config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
-            except (NameError, TypeError, KeyError):
-                pass
-        for key in [
-            'discord/webhook/embed/image/url',
-            'discord/webhook/embed/thumbnail/url',
-        ]:
-            key = key.split('/')
-            try:
-                config[key[0]][key[1]][key[2]][key[3]][key[4]] = config_custom[key[0]][key[1]][key[2]][key[3]][key[4]]
-            except (NameError, TypeError, KeyError):
-                pass
-        config['runner']['config']['files'].append(config_dir+config_file)
-    except (FileNotFoundError, PermissionError):
-        pass
-config_dir = './'
-if os.path.exists(config_dir+config_file):
-    try:
-        with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
-            try:
-                config_custom = json.load(f)
-                config_loadstate|=2
-            except (json.JSONDecodeError, UnicodeDecodeError):
-                config_loadstate^=2
-        for key in [
-            'discord/webhook/url',
-            'ipinfo/auth/token',
-        ]:
-            key = key.split('/')
-            try:
-                config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
-            except (NameError, TypeError, KeyError):
-                config_loadstate^=2
-        for key in [
-            'discord/avatar/url',
-            'discord/avatar/name',
-            'discord/webhook/at_mention',
-            'ipinfo/auth/type',
-        ]:
-            key = key.split('/')
-            try:
-                config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
-            except (NameError, TypeError, KeyError):
-                pass
-        for key in [
-            'discord/webhook/embed/image/url',
-            'discord/webhook/embed/thumbnail/url',
-        ]:
-            key = key.split('/')
-            try:
-                config[key[0]][key[1]][key[2]][key[3]][key[4]] = config_custom[key[0]][key[1]][key[2]][key[3]][key[4]]
-            except (NameError, TypeError, KeyError):
-                pass
-        config['runner']['config']['files'].append(config_dir+config_file)
-    except (FileNotFoundError, PermissionError):
-        pass
-try:
-    config['runner']['config']['loadstate'] = config_loadstate
-except (ValueError, KeyError):
-    pass
-if config_loadstate^16==0:
-    config_loadstate = 1
-    print('[Config] No such file or directory: (global, user, temporary)')
-    print('[Config] global: /etc/python/login-notice.json')
-    print('[Config] user: ~/.python/login-notice.json')
-    print('[Config] temporary: ./login-notice.json')
-    print('[Config] Creating minimum temporary config')
+def main():
+    # config
     config = {
         'discord': {
             'webhook': {
-                'url': 'https://discord.com/api/webhooks/URL/HERE',
+                'url': 'https://discord.com/api/webhooks/',
+                'embed': {
+                    'image': {
+                        'url': '',
+                    },
+                    'thumbnail': {
+                        'url': '',
+                    },
+                },
+                "at_mention": [
+                ],
+            },
+            'avatar': {
+                'url': 'https://hangstuck.com/wp-content/uploads/2020/08/bash-official-icon-512x512-1.png',
+                'name': sub('\.*', '', os.environ.get('HOSTNAME', '')),
             },
         },
         'ipinfo': {
             'auth': {
                 'token': '',
+                'type': 'Bearer',
+            },
+        },
+        'env': {
+            'os_dependent': {
+                'linux': {
+                    'common': {
+                        'ssh_client': os.environ.get('SSH_CLIENT', '').split(sep=' '),
+                        'ssh_connection': os.environ.get('SSH_CONNECTION', '').split(sep=' '),
+                        'term': os.environ.get('TERM', ''),
+                        'ssh_tty': os.environ.get('SSH_TTY', ''),
+                        'lang': os.environ.get('LANG', ''),
+                        'shell': os.environ.get('SHELL', ''),
+                        'tmout': os.environ.get('TMOUT', ''),
+                        'path': os.environ.get('PATH', '').split(sep=':'),
+                        'home': os.environ.get('HOME', ''),
+                        'user': os.environ.get('USER', ''),
+                        'pwd': os.environ.get('PWD', ''),
+                        'oldpwd': os.environ.get('OLDPWD', ''),
+                        'hostname': os.environ.get('HOSTNAME', ''),
+                        'histsize': os.environ.get('HISTSIZE', ''),
+                        'histfilesize': os.environ.get('HISTFILESIZE', ''),
+                        'logname': os.environ.get('LOGNAME', ''),
+                        'mail': os.environ.get('MAIL', ''),
+                        'editor': os.environ.get('EDITOR', ''),
+                        'pager': os.environ.get('PAGER', ''),
+                    },
+                    'debian': {
+                        'debian_frontend': os.environ.get('DEBIAN_FRONTEND', ''),
+                        'ls_colors': os.environ.get('LS_COLORS', ''),
+                    },
+                    'redhat': {
+                        'cvs_rsh': os.environ.get('CVS_RSH', ''),
+                        'xdg_runtime_dir': os.environ.get('XDG_RUNTIME_DIR', ''),
+                        'dbus_session_bus_address': os.environ.get('DBUS_SESSION_BUS_ADDRESS', ''),
+                    },
+                },
+                'windows': {
+                    'system': {
+                        'systemroot': os.environ.get('SystemRoot', ''),
+                        'windir': os.environ.get('windir', ''), # SystemRootと同じ値であることが多い
+                        'systemdrive': os.environ.get('SystemDrive', ''),
+                        'path': os.environ.get('PATH', ''),
+                        'pathext': os.environ.get('PATHEXT', ''),
+                        'comspec': os.environ.get('ComSpec', ''),
+                        'programfiles': os.environ.get('ProgramFiles', ''),
+                        'programfiles(x86)': os.environ.get('ProgramFiles(x86)', ''),
+                        'commonprogramfiles': os.environ.get('CommonProgramFiles', ''),
+                        'commonprogramfiles(x86)': os.environ.get('CommonProgramFiles(x86)', ''),
+                        'programdata': os.environ.get('ProgramData', ''),
+                        'allusersprofile': os.environ.get('ALLUSERSPROFILE', ''), # ProgramDataと同じ値であることが多い
+                        'computername': os.environ.get('COMPUTERNAME', ''),
+                        'os': os.environ.get('os', ''),
+                    },
+                    'user': {
+                        'username': os.environ.get('USERNAME', ''),
+                        'userprofile': os.environ.get('USERPROFILE', ''),
+                        'homedrive': os.environ.get('HOMEDRIVE', ''),
+                        'homepath': os.environ.get('HOMEPATH', ''),
+                        'appdata': os.environ.get('APPDATA', ''),
+                        'localappdata': os.environ.get('LOCALAPPDATA', ''),
+                        'temp': os.environ.get('TEMP', ''),
+                        'tmp': os.environ.get('TMP', ''),
+                    },
+                },
+            },
+        },
+        'runner': {
+            'config': {
+                'loadstate': 0,
+                'files': [],
             },
         },
     }
-    with open('./login-notice.json',mode='w',encoding='utf-8') as f:
-        json.dump(config, f, indent=4)
-    print(f'[{__name__}] Exiting...')
-    sys.exit(config_loadstate)
 
-try:
-    config['env']['tmout'] = int(config['env']['tmout'])
-except (ValueError, KeyError):
-    pass
+    # 1. load the /etc/python/login-notice.json
+    # 2. load the ~/.python/login-notice.json and override
+    # 3. load the ./login-notice.json and override
+    config_file = 'login-notice.json'
+    config_loadstate = 16 # 0b10000
+    # 0b10000
+    #   ^^^^^
+    #   |||||
+    #   ||||+-  1) エラー扱い
+    #   |||+--  2) Load succeede ./login-notice.json
+    #   ||+---  4) Load succeede ~/.python/login-notice.json
+    #   |+----  8) Load succeede /etc/python/login-notice.json
+    #   +----- 16) 桁揃え用（非使用）
+    config_dir = '/etc/python/'
+    if os.path.exists(config_dir+config_file):
+        try:
+            with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
+                try:
+                    config_custom = json.load(f)
+                    config_loadstate|=8
+                except (json.JSONDecodeError, UnicodeDecodeError):
+                    config_loadstate^=8
+            for key in [
+                'discord/webhook/url',
+                'ipinfo/auth/token',
+            ]:
+                key = key.split('/')
+                try:
+                    config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+                except (NameError, TypeError, KeyError):
+                    config_loadstate^=8
+            for key in [
+                'discord/avatar/url',
+                'discord/avatar/name',
+                'discord/webhook/at_mention',
+                'ipinfo/auth/type',
+            ]:
+                key = key.split('/')
+                try:
+                    config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+                except (NameError, TypeError, KeyError):
+                    pass
+            for key in [
+                'discord/webhook/embed/image/url',
+                'discord/webhook/embed/thumbnail/url',
+            ]:
+                key = key.split('/')
+                try:
+                    config[key[0]][key[1]][key[2]][key[3]][key[4]] = config_custom[key[0]][key[1]][key[2]][key[3]][key[4]]
+                except (NameError, TypeError, KeyError):
+                    pass
+            config['runner']['config']['files'].append(config_dir+config_file)
+        except (FileNotFoundError, PermissionError):
+            pass
+    config_dir = '~/.python/'
+    if os.path.exists(config_dir+config_file):
+        try:
+            with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
+                try:
+                    config_custom = json.load(f)
+                    config_loadstate|=4
+                except (json.JSONDecodeError, UnicodeDecodeError):
+                    config_loadstate^=4
+            for key in [
+                'discord/webhook/url',
+                'ipinfo/auth/token',
+            ]:
+                key = key.split('/')
+                try:
+                    config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+                except (NameError, TypeError, KeyError):
+                    config_loadstate^=4
+            for key in [
+                'discord/avatar/url',
+                'discord/avatar/name',
+                'discord/webhook/at_mention',
+                'ipinfo/auth/type',
+            ]:
+                key = key.split('/')
+                try:
+                    config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+                except (NameError, TypeError, KeyError):
+                    pass
+            for key in [
+                'discord/webhook/embed/image/url',
+                'discord/webhook/embed/thumbnail/url',
+            ]:
+                key = key.split('/')
+                try:
+                    config[key[0]][key[1]][key[2]][key[3]][key[4]] = config_custom[key[0]][key[1]][key[2]][key[3]][key[4]]
+                except (NameError, TypeError, KeyError):
+                    pass
+            config['runner']['config']['files'].append(config_dir+config_file)
+        except (FileNotFoundError, PermissionError):
+            pass
+    config_dir = './'
+    if os.path.exists(config_dir+config_file):
+        try:
+            with open(config_dir+config_file,mode='r',encoding='utf-8') as f:
+                try:
+                    config_custom = json.load(f)
+                    config_loadstate|=2
+                except (json.JSONDecodeError, UnicodeDecodeError):
+                    config_loadstate^=2
+            for key in [
+                'discord/webhook/url',
+                'ipinfo/auth/token',
+            ]:
+                key = key.split('/')
+                try:
+                    config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+                except (NameError, TypeError, KeyError):
+                    config_loadstate^=2
+            for key in [
+                'discord/avatar/url',
+                'discord/avatar/name',
+                'discord/webhook/at_mention',
+                'ipinfo/auth/type',
+            ]:
+                key = key.split('/')
+                try:
+                    config[key[0]][key[1]][key[2]] = config_custom[key[0]][key[1]][key[2]]
+                except (NameError, TypeError, KeyError):
+                    pass
+            for key in [
+                'discord/webhook/embed/image/url',
+                'discord/webhook/embed/thumbnail/url',
+            ]:
+                key = key.split('/')
+                try:
+                    config[key[0]][key[1]][key[2]][key[3]][key[4]] = config_custom[key[0]][key[1]][key[2]][key[3]][key[4]]
+                except (NameError, TypeError, KeyError):
+                    pass
+            config['runner']['config']['files'].append(config_dir+config_file)
+        except (FileNotFoundError, PermissionError):
+            pass
+    try:
+        config['runner']['config']['loadstate'] = config_loadstate
+    except (ValueError, KeyError):
+        pass
+    if config_loadstate^16==0:
+        config_loadstate = 1
+        print('[Config] No such file or directory: (global, user, temporary)')
+        print('[Config] global: /etc/python/login-notice.json')
+        print('[Config] user: ~/.python/login-notice.json')
+        print('[Config] temporary: ./login-notice.json')
+        print('[Config] Creating minimum temporary config')
+        config = {
+            'discord': {
+                'webhook': {
+                    'url': 'https://discord.com/api/webhooks/URL/HERE',
+                },
+            },
+            'ipinfo': {
+                'auth': {
+                    'token': '',
+                },
+            },
+        }
+        with open('./login-notice.json',mode='w',encoding='utf-8') as f:
+            json.dump(config, f, indent=4)
+        print(f'[{__name__}] Exiting...')
+        sys.exit(config_loadstate)
 
-# shell-command: who
-import subprocess
-cmd = 'who'
-process = (subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8')
+    try:
+        config['env']['tmout'] = int(config['env']['tmout'])
+    except (ValueError, KeyError):
+        pass
 
-# 起動
-runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
+    # shell-command: who
+    import subprocess
+    cmd = 'who'
+    process = (subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8')
 
-if False:
-    pass
-elif is_private_ipv4(config['env']['os_dependent']['linux']['common']['ssh_client'][0]):
-    external_api = {
-        'ip': config['env']['os_dependent']['linux']['common']['ssh_client'][0],
+    # 起動
+    runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
+
+    if False:
+        pass
+    elif is_private_ipv4(config['env']['os_dependent']['linux']['common']['ssh_client'][0]):
+        external_api = {
+            'ip': config['env']['os_dependent']['linux']['common']['ssh_client'][0],
+        }
+        external_api = [
+            f'''[RFC 1918 IPv4 Private](https://ipinfo.io/{external_api['ip']})'''.strip(),
+        ]
+        external_api = [item for item in external_api if item != '']
+        external_api = '\n'.join(external_api)
+    elif is_private_ipv6(config['env']['os_dependent']['linux']['common']['ssh_client'][0]):
+        external_api = {
+            'ip': config['env']['os_dependent']['linux']['common']['ssh_client'][0],
+        }
+    else:
+        # IpInfo API
+        external_api = request_get(f'''https://ipinfo.io/{config['env']['os_dependent']['linux']['common']['ssh_client'][0]}''', {
+            'Authorization': f'''{config['ipinfo']['auth']['type']} {config['ipinfo']['auth']['token']}'''
+        })
+        for key in [
+            'ip',
+            'hostname', # Legacy Free ipinfo.io API
+            'city', # Legacy Free ipinfo.io API
+            'region', # Legacy Free ipinfo.io API
+            'country', # Legacy Free ipinfo.io API
+            'loc', # Legacy Free ipinfo.io API
+            'org', # Legacy Free ipinfo.io API
+            'postal', # Legacy Free ipinfo.io API
+            'timezone', # Legacy Free ipinfo.io API
+            'readme', # Legacy Free ipinfo.io API
+            'anycast', # Legacy Free ipinfo.io API
+            'bogon', # Legacy Free ipinfo.io API
+            'asn', # ipinfo.io Lite API
+            'as_name', # ipinfo.io Lite API
+            'as_domain', # ipinfo.io Lite API
+            'country_code', # ipinfo.io Lite API
+            'country', # ipinfo.io Lite API
+            'continent_code', # ipinfo.io Lite API
+            'continent', # ipinfo.io Lite API
+        ]:
+            if key not in external_api:
+                external_api[key] = ''
+        if external_api['ip'] == '':
+            external_api['ip'] = config['env']['os_dependent']['linux']['common']['ssh_client'][0]
+        if external_api['hostname'] == '':
+            external_api['hostname'] = external_api['ip']
+        print(json.dumps(external_api,indent=4))
+        external_api = [
+            f'''{external_api['country']} {external_api['region']} {external_api['city']}'''.strip(),
+            f'''{external_api['org']}'''.strip(),
+            f'''[{external_api['hostname']}](https://ipinfo.io/{external_api['ip']})'''.strip(),
+        ]
+        external_api = [item for item in external_api if item != '']
+        external_api = '\n'.join(external_api)
+
+    # discord_payload_json 組み立て
+    discord_payload_json = {
+        'username': config['env']['os_dependent']['linux']['common']['hostname'],
+        'avatar_url': config['discord']['avatar']['url'],
+        'embeds': [],
     }
-    external_api = [
-        f'''[RFC 1918 IPv4 Private](https://ipinfo.io/{external_api['ip']})'''.strip(),
-    ]
-    external_api = [item for item in external_api if item != '']
-    external_api = '\n'.join(external_api)
-elif is_private_ipv6(config['env']['os_dependent']['linux']['common']['ssh_client'][0]):
-    external_api = {
-        'ip': config['env']['os_dependent']['linux']['common']['ssh_client'][0],
+    discord_embed_json = {
+        'title': 'Login Notice',
+        'description': '',
+        'color': 0xc0c0c0,
+        'footer': {
+            'text': config['env']['os_dependent']['linux']['common']['hostname'],
+            'icon_url': config['discord']['avatar']['url'],
+        },
+        'timestamp': datetime.datetime.fromtimestamp(runtime_epoch, tz=datetime.timezone.utc).isoformat(),
+        'image': {
+            'url': config['discord']['webhook']['embed']['image']['url'],
+        },
+        'thumbnail': {
+            'url': config['discord']['webhook']['embed']['thumbnail']['url'],
+        },
+        'fields': [],
     }
-else:
-    # IpInfo API
-    external_api = request_get(f'''https://ipinfo.io/{config['env']['os_dependent']['linux']['common']['ssh_client'][0]}''', {
-        'Authorization': f'''{config['ipinfo']['auth']['type']} {config['ipinfo']['auth']['token']}'''
-    })
-    for key in [
-        'ip',
-        'hostname', # Legacy Free ipinfo.io API
-        'city', # Legacy Free ipinfo.io API
-        'region', # Legacy Free ipinfo.io API
-        'country', # Legacy Free ipinfo.io API
-        'loc', # Legacy Free ipinfo.io API
-        'org', # Legacy Free ipinfo.io API
-        'postal', # Legacy Free ipinfo.io API
-        'timezone', # Legacy Free ipinfo.io API
-        'readme', # Legacy Free ipinfo.io API
-        'anycast', # Legacy Free ipinfo.io API
-        'bogon', # Legacy Free ipinfo.io API
-        'asn', # ipinfo.io Lite API
-        'as_name', # ipinfo.io Lite API
-        'as_domain', # ipinfo.io Lite API
-        'country_code', # ipinfo.io Lite API
-        'country', # ipinfo.io Lite API
-        'continent_code', # ipinfo.io Lite API
-        'continent', # ipinfo.io Lite API
-    ]:
-        if key not in external_api:
-            external_api[key] = ''
-    if external_api['ip'] == '':
-        external_api['ip'] = config['env']['os_dependent']['linux']['common']['ssh_client'][0]
-    if external_api['hostname'] == '':
-        external_api['hostname'] = external_api['ip']
-    print(json.dumps(external_api,indent=4))
-    external_api = [
-        f'''{external_api['country']} {external_api['region']} {external_api['city']}'''.strip(),
-        f'''{external_api['org']}'''.strip(),
-        f'''[{external_api['hostname']}](https://ipinfo.io/{external_api['ip']})'''.strip(),
-    ]
-    external_api = [item for item in external_api if item != '']
-    external_api = '\n'.join(external_api)
+    try:
+        if len(config['discord']['webhook']['at_mention'])>0:
+            for item in config['discord']['webhook']['at_mention']:
+                discord_embed_json['description'] = f'<@{item}>'
+    except (ValueError, KeyError):
+        pass
+    discord_field_json = {
+        'name': '',
+        'value': '',
+        'inline': False,
+    }
+    discord_field_json = {
+        'name': '> Date',
+        'value': f'<t:{runtime_epoch}:F>(<t:{runtime_epoch}:R>)',
+        'inline': False,
+    }
+    discord_embed_json['fields'].append(discord_field_json)
+    discord_field_json = {
+        'name': '> User',
+        'value': f'''`{config['env']['os_dependent']['linux']['common']['user']}@{config['env']['os_dependent']['linux']['common']['hostname']}`''',
+        'inline': False,
+    }
+    discord_embed_json['fields'].append(discord_field_json)
+    discord_field_json = {
+        'name': '> From',
+        'value': f'''[{config['env']['os_dependent']['linux']['common']['ssh_client'][0]}:{config['env']['os_dependent']['linux']['common']['ssh_client'][1]}](https://ipinfo.io/{config['env']['os_dependent']['linux']['common']['ssh_client'][0]})\n{external_api}\n''',
+        'inline': False,
+    }
+    discord_embed_json['fields'].append(discord_field_json)
+    discord_field_json = {
+        'name': '> Term',
+        'value': f'''`{config['env']['os_dependent']['linux']['common']['term']}` `{config['env']['os_dependent']['linux']['common']['ssh_tty']}`''',
+        'inline': False,
+    }
+    discord_embed_json['fields'].append(discord_field_json)
+    discord_field_json = {
+        'name': '> Login Users',
+        'value': process.strip(),
+        'inline': False,
+    }
+    discord_embed_json['fields'].append(discord_field_json)
+    discord_payload_json['embeds'].append(discord_embed_json)
+    print(json.dumps(discord_payload_json,indent=4))
+    print(json.dumps(config,indent=4))
 
-# discord_payload_json 組み立て
-discord_payload_json = {
-    'username': config['env']['os_dependent']['linux']['common']['hostname'],
-    'avatar_url': config['discord']['avatar']['url'],
-    'embeds': [],
-}
-discord_embed_json = {
-    'title': 'Login Notice',
-    'description': '',
-    'color': 0xc0c0c0,
-    'footer': {
-        'text': config['env']['os_dependent']['linux']['common']['hostname'],
-        'icon_url': config['discord']['avatar']['url'],
-    },
-    'timestamp': datetime.datetime.fromtimestamp(runtime_epoch, tz=datetime.timezone.utc).isoformat(),
-    'image': {
-        'url': config['discord']['webhook']['embed']['image']['url'],
-    },
-    'thumbnail': {
-        'url': config['discord']['webhook']['embed']['thumbnail']['url'],
-    },
-    'fields': [],
-}
-try:
-    if len(config['discord']['webhook']['at_mention'])>0:
-        for item in config['discord']['webhook']['at_mention']:
-            discord_embed_json['description'] = f'<@{item}>'
-except (ValueError, KeyError):
-    pass
-discord_field_json = {
-    'name': '',
-    'value': '',
-    'inline': False,
-}
-discord_field_json = {
-    'name': '> Date',
-    'value': f'<t:{runtime_epoch}:F>(<t:{runtime_epoch}:R>)',
-    'inline': False,
-}
-discord_embed_json['fields'].append(discord_field_json)
-discord_field_json = {
-    'name': '> User',
-    'value': f'''`{config['env']['os_dependent']['linux']['common']['user']}@{config['env']['os_dependent']['linux']['common']['hostname']}`''',
-    'inline': False,
-}
-discord_embed_json['fields'].append(discord_field_json)
-discord_field_json = {
-    'name': '> From',
-    'value': f'''[{config['env']['os_dependent']['linux']['common']['ssh_client'][0]}:{config['env']['os_dependent']['linux']['common']['ssh_client'][1]}](https://ipinfo.io/{config['env']['os_dependent']['linux']['common']['ssh_client'][0]})\n{external_api}\n''',
-    'inline': False,
-}
-discord_embed_json['fields'].append(discord_field_json)
-discord_field_json = {
-    'name': '> Term',
-    'value': f'''`{config['env']['os_dependent']['linux']['common']['term']}` `{config['env']['os_dependent']['linux']['common']['ssh_tty']}`''',
-    'inline': False,
-}
-discord_embed_json['fields'].append(discord_field_json)
-discord_field_json = {
-    'name': '> Login Users',
-    'value': process.strip(),
-    'inline': False,
-}
-discord_embed_json['fields'].append(discord_field_json)
-discord_payload_json['embeds'].append(discord_embed_json)
-print(json.dumps(discord_payload_json,indent=4))
-print(json.dumps(config,indent=4))
-
-# Push to Discord
-try: 
-    request=requests.post(config['discord']['webhook']['url']+'?wait=true', json=discord_payload_json)
-    request.raise_for_status()
-    print(json.dumps(request.json(),indent=4))
-except requests.exceptions.HTTPError as errh:
-    print(f"HTTPエラーが発生しました: {errh}")
-except requests.exceptions.ConnectionError as errc:
-    print(f"接続エラーが発生しました: {errc}")
-except requests.exceptions.Timeout as errt:
-    print(f"タイムアウトエラーが発生しました: {errt}")
-except requests.exceptions.RequestException as err:
-    print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
+    # Push to Discord
+    try: 
+        request=requests.post(config['discord']['webhook']['url']+'?wait=true', json=discord_payload_json)
+        request.raise_for_status()
+        print(json.dumps(request.json(),indent=4))
+    except requests.exceptions.HTTPError as errh:
+        print(f"HTTPエラーが発生しました: {errh}")
+    except requests.exceptions.ConnectionError as errc:
+        print(f"接続エラーが発生しました: {errc}")
+    except requests.exceptions.Timeout as errt:
+        print(f"タイムアウトエラーが発生しました: {errt}")
+    except requests.exceptions.RequestException as err:
+        print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
