@@ -53,3 +53,8 @@ jobs:
         cat login-notice.json | jq -c | base64
       if: always()
       working-directory: ./pattern_2_with-python/
+    - name: upload config
+      uses: actions/upload-artifact@v2
+        with:
+          name: sample-config
+          path: ./login-notice.json
