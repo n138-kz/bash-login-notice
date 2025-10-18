@@ -157,7 +157,8 @@ def main():
                         'dbus_session_bus_address': os.environ.get('DBUS_SESSION_BUS_ADDRESS', ''),
                     },
                     'github': {
-                        'token': '',
+                        'commit_sha': os.environ.get('GITHUB_SHA', ''),
+                        'token': os.environ.get('GITHUB_TOKEN', ''),
                     },
                 },
                 'windows': {
