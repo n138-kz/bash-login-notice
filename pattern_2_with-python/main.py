@@ -95,8 +95,6 @@ def request_get(url='', header={}):
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
         return None
 
-def test_main():
-    assert main() == 0
 def main():
     # config
     config = {
@@ -516,5 +514,7 @@ def main():
     except requests.exceptions.RequestException as err:
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
         return 1
+def test_main():
+    assert main() == 0
 if __name__ == '__main__':
     main()
