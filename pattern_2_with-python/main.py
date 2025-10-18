@@ -372,6 +372,14 @@ def main():
     # 起動
     runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 
+    # for github action
+    external_api = request_get('https://ipinfo.io/')
+    external_api = external_api['ip']
+    if len(config['env']['os_dependent']['linux']['common']['ssh_client'])<3:
+        config['env']['os_dependent']['linux']['common']['ssh_client'] = [external_api,0,0]
+    if len(config['env']['os_dependent']['linux']['common']['ssh_connection'])<4:
+        config['env']['os_dependent']['linux']['common']['ssh_connection'] = [external_api,0,external_api,0]
+
     if False:
         pass
     elif is_private_ipv4(config['env']['os_dependent']['linux']['common']['ssh_client'][0]):
