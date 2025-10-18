@@ -39,4 +39,4 @@ jobs:
     - name: Test with pytest
       working-directory: ./pattern_2_with-python/
       run: |
-        pytest main.py
+        pytest *.py
