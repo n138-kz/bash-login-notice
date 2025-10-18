@@ -50,6 +50,6 @@ jobs:
       if: always()
       working-directory: ./pattern_2_with-python/
     - run: |
-        cat login-notice.json | jq
+        cat login-notice.json | jq -c | base64
       if: always()
       working-directory: ./pattern_2_with-python/
