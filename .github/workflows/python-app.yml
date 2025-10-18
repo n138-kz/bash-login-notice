@@ -46,9 +46,15 @@ jobs:
         pytest *.py
     - run: |
         ls -lhA
+      if: failure()
+      working-directory: ./pattern_2_with-python/
+    - run: |
         tree
+      if: failure()
+      working-directory: ./pattern_2_with-python/
+    - run: |
         env | grep ^GITHUB
-      if: always()
+      if: failure()
       working-directory: ./pattern_2_with-python/
     - name: cat login-notice.json
       run: |
@@ -57,13 +63,13 @@ jobs:
       working-directory: ./pattern_2_with-python/
     - name: upload login-notice.json
       uses: actions/upload-artifact@v4
-      if: always()
+      if: failure()
       with:
         name: sample-config
         path: ./pattern_2_with-python/login-notice.json
     - name: upload login-notice.dat
       uses: actions/upload-artifact@v4
-      if: always()
+      if: failure()
       with:
         name: debug-config
-        path: ./pattern_2_with-python/login-notice.dat
+        path: ./pattern_2_with-python/login-notice-json.dat
