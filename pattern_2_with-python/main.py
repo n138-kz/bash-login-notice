@@ -6,6 +6,26 @@ import math
 import datetime
 import requests
 
+# SNMP get storage
+def request_snmpget():
+    # pip install pysnmp
+    """
+    @args serveraddr
+    @args serverport
+    @args snmp_version (1|2c|3)
+    @args snmp_v2_community
+    @args snmp_v3_context_name
+    @args snmp_v3_security_name
+    @args snmp_v3_security_level (noAuthNoPriv|AuthNoPriv|AuthPriv)
+    @args snmp_v3_authn_protocol (MD5|SHA)
+    @args snmp_v3_authn_passphrase
+    @args snmp_v3_privacy_protocol (DES|AES)
+    @args snmp_v3_privacy_passphrase
+    @args snmp_use_bulk_request (true|false)
+    """
+    import pysnmp
+    return None
+
 # IPv4 Is Private address?
 def is_private_ipv4(ip_address_str: str) -> bool:
     import ipaddress
