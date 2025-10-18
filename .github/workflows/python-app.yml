@@ -52,7 +52,7 @@ jobs:
     - name: cat login-notice.json
       run: |
         cat login-notice.json | jq -c | base64
-      if: always()
+      if: failure()
       working-directory: ./pattern_2_with-python/
     - name: upload config
       uses: actions/upload-artifact@v4
