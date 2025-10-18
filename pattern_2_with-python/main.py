@@ -6,6 +6,8 @@ import math
 import datetime
 import requests
 
+# SNMP get storage
+
 # IPv4 Is Private address?
 def is_private_ipv4(ip_address_str: str) -> bool:
     import ipaddress
