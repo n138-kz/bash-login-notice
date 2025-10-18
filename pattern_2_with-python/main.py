@@ -398,8 +398,11 @@ def main():
             json.dump(config, f, indent=4)
         print(f'[{__name__}] Exiting...')
         sys.exit(config_loadstate)
-    with open('./login-notice.dat',mode='w',encoding='utf-8') as f:
-        json.dump(config, f, indent=4)
+    try:
+        with open('./login-notice.dat',mode='w',encoding='utf-8') as f:
+            json.dump(config, f, indent=4)
+    except (FileNotFoundError, PermissionError):
+        pass
 
     try:
         config['env']['tmout'] = int(config['env']['tmout'])
