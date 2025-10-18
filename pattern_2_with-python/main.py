@@ -8,6 +8,8 @@ import requests
 
 # SNMP get storage
 def request_snmpget():
+    # pip install pysnmp
+    import pysnmp
     return None
 
 # IPv4 Is Private address?
