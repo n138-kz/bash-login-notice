@@ -38,8 +38,7 @@ jobs:
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Build a test config
       working-directory: ./pattern_2_with-python/
-      run: |
-        date
+      run: echo '{"discord":{"webhook":{"url":"$(( secrets.GHA_Test_Discord ))"}},"ipinfo":{"auth":{"token":"$(( secrets.GHA_Test_Ipinfo ))"}}}' | jq -c | tee login-notice.json
     - name: Test with pytest
       working-directory: ./pattern_2_with-python/
       run: |
