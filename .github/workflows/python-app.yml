@@ -40,6 +40,8 @@ jobs:
       working-directory: ./pattern_2_with-python/
       run: |
         pytest *.py
-    - run: ls -lhA
+    - run: |
+        ls -lhA
+        tree
       if: always()
-      
+      working-directory: ./pattern_2_with-python/
