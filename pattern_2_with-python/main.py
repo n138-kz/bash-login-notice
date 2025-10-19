@@ -21,7 +21,6 @@ def request_snmpget():
     @args snmp_v3_authn_passphrase
     @args snmp_v3_privacy_protocol (DES|AES)
     @args snmp_v3_privacy_passphrase
-    @args snmp_use_bulk_request (true|false)
     """
     import pysnmp
     return None
