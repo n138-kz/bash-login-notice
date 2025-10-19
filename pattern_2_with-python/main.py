@@ -36,6 +36,15 @@ def request_snmpget(
     @args snmp_v3_privacy_protocol (DES|AES)
     @args snmp_v3_privacy_passphrase
     """
+    from pysnmp import hlapi
+
+    g = hlapi.nextCmd(hlapi.SnmpEngine(),
+           hlapi.CommunityData(snmp_v2_community),
+           hlapi.UdpTransportTarget((serveraddr, serverport)),
+           hlapi.ContextData(),
+           hlapi.ObjectType(hlapi.ObjectIdentity(snmp_module_name, snmp_mib_name)),
+           lexicographicMode=False)
+
     import pysnmp
     return None
 
