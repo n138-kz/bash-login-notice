@@ -615,5 +615,21 @@ def main():
 		return 1
 def test_main():
 	assert main() == 0
+def test_snmp():
+	assert request_snmpget(
+		serveraddr='localhost',
+		serverport=161,
+		snmp_version=3,
+		snmp_v2_community=None,
+		snmp_v3_context_name=None,
+		snmp_v3_security_name=None,
+		snmp_v3_security_level=None,
+		snmp_v3_authn_protocol='MD5',
+		snmp_v3_authn_passphrase=None,
+		snmp_v3_privacy_protocol='AES',
+		snmp_v3_privacy_passphrase=None,
+		snmp_module_name='HOST-RESOURCES-MIB',
+		snmp_mib_name='hrStorageTable',
+	) == 0
 if __name__ == '__main__':
 	main()
