@@ -42,14 +42,19 @@ def request_snmpget(
 		ObjectIdentity, nextCmd, UsmUserData, usmHMACSHAAuthProtocol, usmAesCfb128Protocol
 	)
 
-	g = nextCmd(SnmpEngine(),
-		   CommunityData(snmp_v2_community),
-		   UdpTransportTarget((serveraddr, serverport)),
-		   ContextData(),
-		   ObjectType(ObjectIdentity(snmp_module_name, snmp_mib_name)),
-		   lexicographicMode=False)
+	g = nextCmd(
+		SnmpEngine(),
+		UsmUserData(
+			snmp_v3_security_name, snmp_v3_authn_passphrase, snmp_v3_privacy_passphrase,
+			authProtocol=usmHMACSHAAuthProtocol,
+			privProtocol=usmAesCfb128Protocol,
+		),
+		UdpTransportTarget((serveraddr, serverport)),
+		ContextData(),
+		ObjectType(ObjectIdentity(snmp_module_name, snmp_mib_name)),
+		lexicographicMode=False
+	)
 
-	import pysnmp
 	return None
 
 # IPv4 Is Private address?
