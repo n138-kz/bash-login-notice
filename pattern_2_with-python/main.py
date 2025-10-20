@@ -39,7 +39,7 @@ def request_snmpget(
 	import pysnmp
 	from pysnmp.hlapi import (
 		SnmpEngine, UdpTransportTarget, ContextData, ObjectType,
-		ObjectIdentity, nextCmd, UsmUserData
+		ObjectIdentity, nextCmd, UsmUserData, usmHMACSHAAuthProtocol, usmAesCfb128Protocol
 	)
 
 	g = nextCmd(SnmpEngine(),
