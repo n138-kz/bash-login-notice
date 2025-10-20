@@ -2,3 +2,4 @@ requests
 pysnmp
 pysnmplib
 snmpclitools
+cryptography
