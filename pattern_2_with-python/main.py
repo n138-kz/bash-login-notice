@@ -36,7 +36,11 @@ def request_snmpget(
 	@args snmp_v3_privacy_protocol (DES|AES)
 	@args snmp_v3_privacy_passphrase
 	"""
-	from pysnmp.hlapi import nextCmd, SnmpEngine, CommunityData, UdpTransportTarget, ContextData, ObjectType, ObjectIdentity
+	import pysnmp
+	from pysnmp.hlapi import (
+		SnmpEngine, UdpTransportTarget, ContextData, ObjectType,
+		ObjectIdentity, nextCmd, UsmUserData
+	)
 
 	g = nextCmd(SnmpEngine(),
 		   CommunityData(snmp_v2_community),
