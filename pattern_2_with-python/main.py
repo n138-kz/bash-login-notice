@@ -572,19 +572,23 @@ def main():
         request.raise_for_status()
         print(json.dumps(request.json(),indent=4))
         return 0
+        print(f"request.status_code: {request.status_code}")
     except requests.exceptions.HTTPError as errh:
         print(f"HTTPエラーが発生しました: {errh}")
-        print(request.status_code)
         return 0
+        print(f"request.status_code: {request.status_code}")
     except requests.exceptions.ConnectionError as errc:
         print(f"接続エラーが発生しました: {errc}")
         return 1
+        print(f"request.status_code: {request.status_code}")
     except requests.exceptions.Timeout as errt:
         print(f"タイムアウトエラーが発生しました: {errt}")
         return 1
+        print(f"request.status_code: {request.status_code}")
     except requests.exceptions.RequestException as err:
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
         return 1
+        print(f"request.status_code: {request.status_code}")
 def test_main():
     assert main() == 0
 if __name__ == '__main__':
