@@ -429,12 +429,6 @@ def main():
     except (ValueError, KeyError):
         pass
 
-    # shell-command: who
-    import subprocess
-    cmd = 'who'
-    process = (subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8')
-    process = os_exec('who')
-
     # 起動
     runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 
