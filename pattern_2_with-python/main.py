@@ -559,7 +559,7 @@ def main():
     import re
     discord_field_json = {
         'name': '> Login Users',
-        'value': f'```\n{re.sub('  +', '\t', os_exec("who"))}\n```\n',
+        'value': f'```\n{re.sub("  +", "\t", os_exec("who"))}\n```\n',
         'inline': False,
     }
     discord_embed_json['fields'].append(discord_field_json)
