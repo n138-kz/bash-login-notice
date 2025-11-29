@@ -572,23 +572,23 @@ def main():
         request.raise_for_status()
         print(json.dumps(request.json(),indent=4))
         print(f"request.status_code: {request.status_code}")
-        return int.from_bytes(0b00000000, byteorder='big', signed=True)
+        return int.from_bytes(b'\x0', byteorder='big', signed=True)
     except requests.exceptions.HTTPError as errh:
         print(f"HTTPエラーが発生しました: {errh}")
         print(f"request.status_code: {request.status_code}")
-        return int.from_bytes(0b00000110, byteorder='big', signed=True)
+        return int.from_bytes(b'\x6', byteorder='big', signed=True)
     except requests.exceptions.ConnectionError as errc:
         print(f"接続エラーが発生しました: {errc}")
         print(f"request.status_code: {request.status_code}")
-        return int.from_bytes(0b10000110, byteorder='big', signed=True)
+        return int.from_bytes(b'\x86', byteorder='big', signed=True)
     except requests.exceptions.Timeout as errt:
         print(f"タイムアウトエラーが発生しました: {errt}")
         print(f"request.status_code: {request.status_code}")
-        return int.from_bytes(0b10000110, byteorder='big', signed=True)
+        return int.from_bytes(b'\x86', byteorder='big', signed=True)
     except requests.exceptions.RequestException as err:
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
         print(f"request.status_code: {request.status_code}")
-        return int.from_bytes(0b11000010, byteorder='big', signed=True)
+        return int.from_bytes(b'\x86', byteorder='big', signed=True)
 def test_main():
     assert main() >= 0
 if __name__ == '__main__':
