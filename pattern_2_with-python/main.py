@@ -563,8 +563,8 @@ def main():
     }
     discord_embed_json['fields'].append(discord_field_json)
     discord_payload_json['embeds'].append(discord_embed_json)
-    #print(json.dumps(discord_payload_json,indent=4))
-    #print(json.dumps(config,indent=4))
+    print(json.dumps(discord_payload_json,indent=4))
+    print(json.dumps(config,indent=4))
 
     # main() result code
     unsigned_int = 0
