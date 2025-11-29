@@ -571,25 +571,32 @@ def main():
         request=requests.post(config['discord']['webhook']['url']+'?wait=true', json=discord_payload_json)
         request.raise_for_status()
         print(json.dumps(request.json(),indent=4))
-        return 0
         print(f"request.status_code: {request.status_code}")
+        return int.from_bytes(0b00000000, byteorder='big', signed=True)
     except requests.exceptions.HTTPError as errh:
         print(f"HTTPエラーが発生しました: {errh}")
-        return 0
         print(f"request.status_code: {request.status_code}")
+        return int.from_bytes(0b00000110, byteorder='big', signed=True)
     except requests.exceptions.ConnectionError as errc:
         print(f"接続エラーが発生しました: {errc}")
-        return 1
         print(f"request.status_code: {request.status_code}")
+        return int.from_bytes(0b10000110, byteorder='big', signed=True)
     except requests.exceptions.Timeout as errt:
         print(f"タイムアウトエラーが発生しました: {errt}")
-        return 1
         print(f"request.status_code: {request.status_code}")
+        return int.from_bytes(0b10000110, byteorder='big', signed=True)
     except requests.exceptions.RequestException as err:
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
-        return 1
         print(f"request.status_code: {request.status_code}")
+        return int.from_bytes(0b11000010, byteorder='big', signed=True)
 def test_main():
-    assert main() == 0
+    assert main() >= 0
 if __name__ == '__main__':
     main()
+    '''
+    Result main() code:
+        success:
+             0 (00000000) -  127 (01111111)
+        failure:
+            -1 (10000001) - -128 (10000000)
+    '''
