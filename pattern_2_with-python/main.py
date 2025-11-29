@@ -97,7 +97,7 @@ def request_get(url='', header={}):
 
 # exec by subprocess
 def os_exec(cmd:str=''):
-    if len(cmd.strip())>0:
+    if len(cmd.strip())==0:
         return None
 
     # shell-command
