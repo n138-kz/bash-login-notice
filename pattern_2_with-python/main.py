@@ -95,6 +95,11 @@ def request_get(url='', header={}):
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
         return None
 
+# exec by subprocess
+def os_exec(cmd:str=''):
+    if len(cmd.strip())>0:
+        return None
+
 def main():
     # config
     config = {
