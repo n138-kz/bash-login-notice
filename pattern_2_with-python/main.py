@@ -572,23 +572,38 @@ def main():
         request.raise_for_status()
         print(json.dumps(request.json(),indent=4))
         print(f"request.status_code: {request.status_code}")
-        return int.from_bytes(0b00000000.to_bytes(1), byteorder='big', signed=True)
+        unsigned_int = 0
+        byte_array = unsigned_int.to_bytes(1, byteorder='big')
+        signed_int = int.from_bytes(byte_array, byteorder='big', signed=True)
+        return signed_int
     except requests.exceptions.HTTPError as errh:
         print(f"HTTPエラーが発生しました: {errh}")
         print(f"request.status_code: {request.status_code}")
-        return int.from_bytes(0b00000110.to_bytes(1), byteorder='big', signed=True)
+        unsigned_int = 0b00000110
+        byte_array = unsigned_int.to_bytes(1, byteorder='big')
+        signed_int = int.from_bytes(byte_array, byteorder='big', signed=True)
+        return signed_int
     except requests.exceptions.ConnectionError as errc:
         print(f"接続エラーが発生しました: {errc}")
         print(f"request.status_code: {request.status_code}")
-        return int.from_bytes(0b10000110.to_bytes(1), byteorder='big', signed=True)
+        unsigned_int = 0b10000110
+        byte_array = unsigned_int.to_bytes(1, byteorder='big')
+        signed_int = int.from_bytes(byte_array, byteorder='big', signed=True)
+        return signed_int
     except requests.exceptions.Timeout as errt:
         print(f"タイムアウトエラーが発生しました: {errt}")
         print(f"request.status_code: {request.status_code}")
-        return int.from_bytes(0b10000110.to_bytes(1), byteorder='big', signed=True)
+        unsigned_int = 0b10000110
+        byte_array = unsigned_int.to_bytes(1, byteorder='big')
+        signed_int = int.from_bytes(byte_array, byteorder='big', signed=True)
+        return signed_int
     except requests.exceptions.RequestException as err:
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
         print(f"request.status_code: {request.status_code}")
-        return int.from_bytes(0b11000010.to_bytes(1), byteorder='big', signed=True)
+        unsigned_int = 0b11000010
+        byte_array = unsigned_int.to_bytes(1, byteorder='big')
+        signed_int = int.from_bytes(byte_array, byteorder='big', signed=True)
+        return signed_int
 def test_main():
     assert main() >= 0
 if __name__ == '__main__':
