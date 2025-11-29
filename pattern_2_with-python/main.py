@@ -540,7 +540,7 @@ def main():
     discord_embed_json['fields'].append(discord_field_json)
     discord_field_json = {
         'name': '> User',
-        'value': f'''`{config['env']['os_dependent']['linux']['common']['user']}@{config['env']['os_dependent']['linux']['common']['hostname']}`''',
+        'value': f'```\n{config['env']['os_dependent']['linux']['common']['user']}@{config['env']['os_dependent']['linux']['common']['hostname']}\n```\n',
         'inline': False,
     }
     discord_embed_json['fields'].append(discord_field_json)
