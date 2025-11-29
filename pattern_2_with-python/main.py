@@ -563,8 +563,8 @@ def main():
     }
     discord_embed_json['fields'].append(discord_field_json)
     discord_payload_json['embeds'].append(discord_embed_json)
-    #print(json.dumps(discord_payload_json,indent=4))
-    #print(json.dumps(config,indent=4))
+    print(json.dumps(discord_payload_json,indent=4))
+    print(json.dumps(config,indent=4))
 
     # main() result code
     unsigned_int = 0
@@ -573,8 +573,8 @@ def main():
     try: 
         request=requests.post(config['discord']['webhook']['url']+'?wait=true', json=discord_payload_json)
         request.raise_for_status()
-        #print(json.dumps(request.json(),indent=4))
-        #print(f"request.status_code: {request.status_code}")
+        print(json.dumps(request.json(),indent=4))
+        print(f"request.status_code: {request.status_code}")
         unsigned_int = 0
     except requests.exceptions.HTTPError as errh:
         print(f"HTTPエラーが発生しました: {errh}")
