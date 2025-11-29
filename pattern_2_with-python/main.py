@@ -112,6 +112,8 @@ def os_exec(cmd:str=''):
     process = process.decode('utf-8')
     process = process.strip()
 
+    return process
+
 def main():
     # config
     config = {
