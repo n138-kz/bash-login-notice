@@ -95,6 +95,25 @@ def request_get(url='', header={}):
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
         return None
 
+# exec by subprocess
+def os_exec(cmd:str=''):
+    if len(cmd.strip())==0:
+        return None
+
+    # shell-command
+    import subprocess
+    process = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        shell=True,
+        )
+    process = process.communicate()
+    process = process[0]
+    process = process.decode('utf-8')
+    process = process.strip()
+
+    return process
+
 def main():
     # config
     config = {
@@ -410,11 +429,6 @@ def main():
     except (ValueError, KeyError):
         pass
 
-    # shell-command: who
-    import subprocess
-    cmd = 'who'
-    process = (subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=True).communicate()[0]).decode('utf-8')
-
     # 起動
     runtime_epoch = math.trunc(datetime.datetime.now().timestamp())
 
@@ -542,9 +556,10 @@ def main():
         'inline': False,
     }
     discord_embed_json['fields'].append(discord_field_json)
+    import re
     discord_field_json = {
         'name': '> Login Users',
-        'value': process.strip(),
+        'value': f'```\n{re.sub("  +", "   ", os_exec("who"))}\n```\n',
         'inline': False,
     }
     discord_embed_json['fields'].append(discord_field_json)
@@ -552,26 +567,44 @@ def main():
     print(json.dumps(discord_payload_json,indent=4))
     print(json.dumps(config,indent=4))
 
+    # main() result code
+    unsigned_int = 0
+
     # Push to Discord
     try: 
         request=requests.post(config['discord']['webhook']['url']+'?wait=true', json=discord_payload_json)
         request.raise_for_status()
         print(json.dumps(request.json(),indent=4))
-        return 0
+        print(f"request.status_code: {request.status_code}")
+        unsigned_int = 0
     except requests.exceptions.HTTPError as errh:
         print(f"HTTPエラーが発生しました: {errh}")
-        print(request.status_code)
-        return 0
+        print(f"request.status_code: {request.status_code}")
+        unsigned_int = 0b00000110
     except requests.exceptions.ConnectionError as errc:
         print(f"接続エラーが発生しました: {errc}")
-        return 1
+        print(f"request.status_code: {request.status_code}")
+        unsigned_int = 0b10000110
     except requests.exceptions.Timeout as errt:
         print(f"タイムアウトエラーが発生しました: {errt}")
-        return 1
+        print(f"request.status_code: {request.status_code}")
+        unsigned_int = 0b10000110
     except requests.exceptions.RequestException as err:
         print(f"リクエスト中に予期せぬエラーが発生しました: {err}")
-        return 1
+        print(f"request.status_code: {request.status_code}")
+        unsigned_int = 0b11000010
+    byte_array = unsigned_int.to_bytes(1, byteorder='big')
+    signed_int = int.from_bytes(byte_array, byteorder='big', signed=True)
+    return signed_int
+
 def test_main():
-    assert main() == 0
+    assert main() >= 0
 if __name__ == '__main__':
     main()
+    '''
+    Result main() code:
+        success:
+             0 (00000000) -  127 (01111111)
+        failure:
+            -1 (10000001) - -128 (10000000)
+    '''
