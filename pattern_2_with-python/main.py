@@ -552,7 +552,7 @@ def main():
     discord_embed_json['fields'].append(discord_field_json)
     discord_field_json = {
         'name': '> Term',
-        'value': f'''`{config['env']['os_dependent']['linux']['common']['term']}` `{config['env']['os_dependent']['linux']['common']['ssh_tty']}`''',
+        'value': f'```\n{config['env']['os_dependent']['linux']['common']['term']} {config['env']['os_dependent']['linux']['common']['ssh_tty']}\n```\n',
         'inline': False,
     }
     discord_embed_json['fields'].append(discord_field_json)
