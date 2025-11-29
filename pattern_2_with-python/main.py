@@ -564,7 +564,7 @@ def main():
     discord_embed_json['fields'].append(discord_field_json)
     discord_field_json = {
         'name': '> Login Users',
-        'value': process.strip(),
+        'value': f'```\n{os_exec('who')}\n```\n',
         'inline': False,
     }
     discord_embed_json['fields'].append(discord_field_json)
