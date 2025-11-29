@@ -100,6 +100,18 @@ def os_exec(cmd:str=''):
     if len(cmd.strip())>0:
         return None
 
+    # shell-command
+    import subprocess
+    process = subprocess.Popen(
+        cmd,
+        stdout=subprocess.PIPE,
+        shell=True,
+        )
+    process = process.communicate()
+    process = process[0]
+    process = process.decode('utf-8')
+    process = process.strip()
+
 def main():
     # config
     config = {
